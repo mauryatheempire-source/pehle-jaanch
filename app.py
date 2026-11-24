@@ -1,4 +1,4 @@
-import os, re, json, tempfile, uuid
+import os, re, json, tempfile, uuid, shutil
 from io import BytesIO
 from flask import Flask, render_template, request, jsonify
 import fitz
@@ -67,9 +67,11 @@ def extract_pdf(file):
         text = page.get_text('text') or ''
         # OCR pages with little/no embedded text (supports scanned and mixed PDFs).
         if len(text.strip()) < 30:
-            pix = page.get_pixmap(dpi=200, alpha=False)
-            image = Image.open(BytesIO(pix.tobytes('png')))
-            text = pytesseract.image_to_string(image, config='--psm 3') or ''
+            if not shutil.which('tesseract'):
+                raise RuntimeError('OCR engine is not installed on the server.')
+            pix = page.get_pixmap(dpi=250, alpha=False)
+            image = Image.open(BytesIO(pix.tobytes('png'))).convert('RGB')
+            text = pytesseract.image_to_string(image, lang='eng', config='--oem 3 --psm 3') or ''
         pages.append({'page': i + 1, 'text': text})
     doc.close()
     return pages
@@ -158,13 +160,24 @@ def analyze():
         if total_text < 80:
             return jsonify({'error': 'We could not recognise enough text in this PDF, even after OCR. Please upload a clearer scan or a text-based PDF.'}), 422
         return jsonify({'ok': True, 'report': build_report(pages)})
-    except Exception:
+    except Exception as exc:
         app.logger.exception('PDF analysis failed')
-        return jsonify({'error': 'We could not read this PDF. Please try another PDF quotation.'}), 500
+        if isinstance(exc, RuntimeError) and 'OCR engine is not installed' in str(exc):
+            message = 'OCR is not available on the server yet. Please check the latest Render deployment and build logs.'
+        elif isinstance(exc, pytesseract.pytesseract.TesseractNotFoundError):
+            message = 'The OCR engine is missing from the server. Please check the Render build logs and redeploy.'
+        elif isinstance(exc, pytesseract.pytesseract.TesseractError):
+            message = 'The OCR engine could not process this page. The scan may be damaged or unclear.'
+        elif isinstance(exc, fitz.FileDataError):
+            message = 'This PDF appears damaged or invalid. Please open and re-save it as a PDF, then upload again.'
+        else:
+            message = 'PDF processing failed (' + type(exc).__name__ + '). Please share this error with support.'
+        return jsonify({'error': message, 'error_type': type(exc).__name__}), 500
 
 @app.get('/health')
 def health():
-    return jsonify({'status': 'ok'})
+    tesseract_path = shutil.which('tesseract')
+    return jsonify({'status': 'ok', 'ocr_available': bool(tesseract_path), 'ocr_engine': tesseract_path or 'not found'})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', '5000')))
