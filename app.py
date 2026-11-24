@@ -1,6 +1,9 @@
 import os, re, json, tempfile, uuid
+from io import BytesIO
 from flask import Flask, render_template, request, jsonify
 import fitz
+from PIL import Image
+import pytesseract
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 25 * 1024 * 1024
@@ -62,6 +65,11 @@ def extract_pdf(file):
     pages = []
     for i, page in enumerate(doc):
         text = page.get_text('text') or ''
+        # OCR pages with little/no embedded text (supports scanned and mixed PDFs).
+        if len(text.strip()) < 30:
+            pix = page.get_pixmap(dpi=200, alpha=False)
+            image = Image.open(BytesIO(pix.tobytes('png')))
+            text = pytesseract.image_to_string(image, config='--psm 3') or ''
         pages.append({'page': i + 1, 'text': text})
     doc.close()
     return pages
@@ -148,7 +156,7 @@ def analyze():
         pages = extract_pdf(file)
         total_text = sum(len(p['text'].strip()) for p in pages)
         if total_text < 80:
-            return jsonify({'error': 'This PDF appears to be scanned/image-only. OCR support is the next upgrade; for now please upload a text-based PDF.'}), 422
+            return jsonify({'error': 'We could not recognise enough text in this PDF, even after OCR. Please upload a clearer scan or a text-based PDF.'}), 422
         return jsonify({'ok': True, 'report': build_report(pages)})
     except Exception:
         app.logger.exception('PDF analysis failed')
