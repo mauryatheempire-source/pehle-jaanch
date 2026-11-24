@@ -69,7 +69,7 @@ def extract_pdf(file):
         if len(text.strip()) < 30:
             if not shutil.which('tesseract'):
                 raise RuntimeError('OCR engine is not installed on the server.')
-            pix = page.get_pixmap(dpi=250, alpha=False)
+            pix = page.get_pixmap(dpi=200, alpha=False)
             image = Image.open(BytesIO(pix.tobytes('png'))).convert('RGB')
             text = pytesseract.image_to_string(image, lang='eng', config='--oem 3 --psm 3') or ''
         pages.append({'page': i + 1, 'text': text})
