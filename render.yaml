@@ -2,7 +2,7 @@ services:
   - type: web
     name: pehle-jaanch
     runtime: python
-    buildCommand: pip install -r requirements.txt
+    buildCommand: apt-get update && apt-get install -y tesseract-ocr && pip install -r requirements.txt
     startCommand: gunicorn app:app
     plan: free
     healthCheckPath: /health
