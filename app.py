@@ -126,6 +126,52 @@ def page_for_term(pages, patterns):
             return p['page']
     return None
 
+def commercial_review(pages, text):
+    checks = []
+    def add(label, patterns, good_note, missing_note):
+        ev = evidence_for_term(pages, patterns)
+        checks.append({
+            'label': label,
+            'status': 'Found in quotation' if ev else 'Not clearly found',
+            'note': good_note if ev else missing_note,
+            'page': ev['page'] if ev else None,
+            'evidence': ev['text'] if ev else None
+        })
+
+    add('Item-wise BOQ / price breakup',
+        [r'\bBOQ\b', r'bill of quantities', r'price break.?up', r'item.?wise', r'quantity\s+.*\brate\b'],
+        'A BOQ or item-wise breakup appears in the quotation. Check quantities, unit rates and totals line by line.',
+        'No clear item-wise BOQ or price breakup reference was found. Ask for quantities, unit rates and line totals.')
+    add('GST treatment',
+        [r'\bGST\b', r'\bCGST\b', r'\bSGST\b', r'\bIGST\b'],
+        'A tax reference appears. Confirm the applicable rate, taxable value and whether GST is included in the quoted total.',
+        'No clear GST/tax reference was found. Ask for the applicable tax rate and whether taxes are included or extra.')
+    add('Freight, installation and other charges',
+        [r'freight', r'transportation', r'packing', r'insurance', r'installation charges', r'erection', r'commissioning charges'],
+        'One or more additional-charge terms appear. Confirm which are included and which will be billed separately.',
+        'No clear freight/installation/other-charge detail was found. Ask for a written list of all additional charges.')
+    add('Payment milestones',
+        [r'payment schedule', r'payment terms', r'milestone', r'advance payment', r'on dispatch', r'on delivery', r'on commissioning'],
+        'Payment-related wording appears. Link every instalment to a measurable deliverable and acceptance milestone.',
+        'No clear payment milestone schedule was found. Ask for stage-wise amounts, due dates and acceptance conditions.')
+    add('Completion and delay terms',
+        [r'liquidated damages', r'\bLD\b', r'delay penalty', r'delay damages', r'time is of the essence', r'completion period'],
+        'Completion/delay wording appears. Confirm the start date, completion trigger, extensions and any delay remedy.',
+        'No clear delay remedy or completion trigger was found. Ask how delays and extensions will be handled.')
+
+    pct = [float(x) for x in re.findall(r'(\d+(?:\.\d+)?)\s*%', text)]
+    payment_context = bool(re.search(r'payment|advance|milestone|dispatch|delivery|commissioning', text, re.I))
+    payment_pcts = pct if payment_context else []
+    if payment_pcts:
+        total = sum(payment_pcts)
+        note = f'Percentage figures appear near payment-related wording and add to {total:g}%. Confirm these are all payment stages and that the schedule totals 100%.'
+        if abs(total - 100) > 0.01:
+            note += ' The extracted percentage total is not 100%; check the original table carefully.'
+        checks.append({'label':'Payment percentage cross-check','status':'Review figures','note':note,'page':None,'evidence':None})
+    else:
+        checks.append({'label':'Payment percentage cross-check','status':'Not calculated','note':'No payment percentages could be confidently isolated from the extracted text. Check the payment table manually.','page':None,'evidence':None})
+    return checks
+
 def build_report(pages):
     text = '\n'.join(p['text'] for p in pages)
     project = detect_project(text)
@@ -153,6 +199,7 @@ def build_report(pages):
         findings.append({'label': label, 'status': status, 'note': note, 'page': page, 'evidence': evidence['text'] if evidence else None})
 
     amounts = find_amounts(text)
+    commercial_checks = commercial_review(pages, text)
     if len(amounts) >= 2:
         arithmetic = 'Multiple monetary figures found; line-item reconciliation is recommended.'
     elif len(amounts) == 1:
@@ -170,6 +217,7 @@ def build_report(pages):
         'findings': findings,
         'questions': QUESTIONS.get(project, QUESTIONS['General EPC']),
         'amounts': amounts,
+        'commercial_checks': commercial_checks,
         'arithmetic': arithmetic,
         'extracted_text': text[:30000],
     }
