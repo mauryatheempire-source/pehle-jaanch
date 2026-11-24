@@ -1,5 +1,6 @@
-import os, re, json, tempfile, uuid, shutil
+import os, re, json, tempfile, uuid, shutil, threading
 from io import BytesIO
+from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, render_template, request, jsonify
 import fitz
 from PIL import Image
@@ -7,6 +8,9 @@ import pytesseract
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 25 * 1024 * 1024
+executor = ThreadPoolExecutor(max_workers=2)
+jobs = {}
+jobs_lock = threading.Lock()
 
 PROJECT_PATTERNS = {
     'Solar EPC': [r'\bsolar\b', r'pv module', r'photovoltaic', r'inverter'],
@@ -60,18 +64,25 @@ QUESTIONS = {
     ]
 }
 
-def extract_pdf(file):
-    doc = fitz.open(stream=file.read(), filetype='pdf')
+def extract_pdf_bytes(file_bytes, job_id=None):
+    doc = fitz.open(stream=file_bytes, filetype='pdf')
     pages = []
+    total_pages = len(doc)
+    if total_pages > 100:
+        doc.close()
+        raise ValueError('This quotation has more than 100 pages. Please split it into smaller PDF files and upload one part at a time.')
     for i, page in enumerate(doc):
+        if job_id:
+            with jobs_lock:
+                jobs[job_id].update({'progress': i + 1, 'total': total_pages, 'message': f'Reading page {i + 1} of {total_pages}…'})
         text = page.get_text('text') or ''
         # OCR pages with little/no embedded text (supports scanned and mixed PDFs).
         if len(text.strip()) < 30:
             if not shutil.which('tesseract'):
                 raise RuntimeError('OCR engine is not installed on the server.')
-            pix = page.get_pixmap(dpi=200, alpha=False)
-            image = Image.open(BytesIO(pix.tobytes('png'))).convert('RGB')
-            text = pytesseract.image_to_string(image, lang='eng', config='--oem 3 --psm 3') or ''
+            pix = page.get_pixmap(dpi=150, colorspace=fitz.csGRAY, alpha=False)
+            image = Image.open(BytesIO(pix.tobytes('png')))
+            text = pytesseract.image_to_string(image, lang='eng', config='--oem 1 --psm 6', timeout=30) or ''
         pages.append({'page': i + 1, 'text': text})
     doc.close()
     return pages
@@ -147,6 +158,32 @@ def build_report(pages):
 def home():
     return render_template('index.html')
 
+def run_analysis(job_id, file_bytes):
+    try:
+        with jobs_lock:
+            jobs[job_id].update({'status': 'processing', 'message': 'Opening quotation…'})
+        pages = extract_pdf_bytes(file_bytes, job_id)
+        total_text = sum(len(p['text'].strip()) for p in pages)
+        if total_text < 80:
+            raise ValueError('We could not recognise enough text in this PDF, even after OCR. Please upload a clearer scan or a text-based PDF.')
+        report = build_report(pages)
+        with jobs_lock:
+            jobs[job_id].update({'status': 'done', 'message': 'Jaanch complete', 'report': report})
+    except Exception as exc:
+        app.logger.exception('PDF analysis failed')
+        if isinstance(exc, pytesseract.pytesseract.TesseractNotFoundError):
+            message = 'The OCR engine is missing from the server.'
+        elif isinstance(exc, RuntimeError) and 'timeout' in str(exc).lower():
+            message = 'OCR took too long on one page. Please split the PDF into smaller parts or upload a clearer copy.'
+        elif isinstance(exc, ValueError):
+            message = str(exc)
+        elif isinstance(exc, fitz.FileDataError):
+            message = 'This PDF appears damaged or invalid. Please open and re-save it as a PDF, then upload again.'
+        else:
+            message = 'PDF processing failed (' + type(exc).__name__ + '). Please try a smaller PDF.'
+        with jobs_lock:
+            jobs[job_id].update({'status': 'error', 'message': message})
+
 @app.post('/api/analyze')
 def analyze():
     file = request.files.get('quotation')
@@ -154,25 +191,22 @@ def analyze():
         return jsonify({'error': 'Please upload an EPC quotation PDF.'}), 400
     if not file.filename.lower().endswith('.pdf'):
         return jsonify({'error': 'Please upload a PDF quotation.'}), 400
-    try:
-        pages = extract_pdf(file)
-        total_text = sum(len(p['text'].strip()) for p in pages)
-        if total_text < 80:
-            return jsonify({'error': 'We could not recognise enough text in this PDF, even after OCR. Please upload a clearer scan or a text-based PDF.'}), 422
-        return jsonify({'ok': True, 'report': build_report(pages)})
-    except Exception as exc:
-        app.logger.exception('PDF analysis failed')
-        if isinstance(exc, RuntimeError) and 'OCR engine is not installed' in str(exc):
-            message = 'OCR is not available on the server yet. Please check the latest Render deployment and build logs.'
-        elif isinstance(exc, pytesseract.pytesseract.TesseractNotFoundError):
-            message = 'The OCR engine is missing from the server. Please check the Render build logs and redeploy.'
-        elif isinstance(exc, pytesseract.pytesseract.TesseractError):
-            message = 'The OCR engine could not process this page. The scan may be damaged or unclear.'
-        elif isinstance(exc, fitz.FileDataError):
-            message = 'This PDF appears damaged or invalid. Please open and re-save it as a PDF, then upload again.'
-        else:
-            message = 'PDF processing failed (' + type(exc).__name__ + '). Please share this error with support.'
-        return jsonify({'error': message, 'error_type': type(exc).__name__}), 500
+    file_bytes = file.read()
+    if not file_bytes.startswith(b'%PDF'):
+        return jsonify({'error': 'This file does not appear to be a valid PDF.'}), 400
+    job_id = str(uuid.uuid4())
+    with jobs_lock:
+        jobs[job_id] = {'status': 'queued', 'progress': 0, 'total': 0, 'message': 'Upload received. Preparing your quotation…'}
+    executor.submit(run_analysis, job_id, file_bytes)
+    return jsonify({'job_id': job_id}), 202
+
+@app.get('/api/status/<job_id>')
+def analysis_status(job_id):
+    with jobs_lock:
+        job = jobs.get(job_id)
+        if not job:
+            return jsonify({'error': 'Analysis session not found. Please upload the PDF again.'}), 404
+        return jsonify({k: v for k, v in job.items() if k != 'report'} | ({'report': job['report']} if job['status'] == 'done' else {}))
 
 @app.get('/health')
 def health():
