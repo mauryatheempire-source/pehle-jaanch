@@ -101,6 +101,25 @@ def find_amounts(text):
     vals = re.findall(r'(?:₹|Rs\.?|INR)\s*[0-9][0-9,]*(?:\.\d+)?', text, re.I)
     return list(dict.fromkeys(vals))[:12]
 
+def evidence_for_term(pages, patterns, limit=260):
+    """Return a short, page-labelled quotation excerpt supporting a keyword match."""
+    for p in pages:
+        source = p['text'] or ''
+        for pattern in patterns:
+            match = re.search(pattern, source, re.I)
+            if not match:
+                continue
+            start = max(source.rfind('\n', 0, match.start()), source.rfind('.', 0, match.start()), source.rfind(';', 0, match.start())) + 1
+            ends = [x for x in (source.find('\n', match.end()), source.find('.', match.end()), source.find(';', match.end())) if x >= 0]
+            end = min(ends) + 1 if ends else len(source)
+            excerpt = re.sub(r'\s+', ' ', source[start:end]).strip()
+            if len(excerpt) > limit:
+                left = max(0, match.start() - start - 75)
+                excerpt = '…' + excerpt[left:left + limit - 1].strip() + '…'
+            if excerpt:
+                return {'page': p['page'], 'text': excerpt}
+    return None
+
 def page_for_term(pages, patterns):
     for p in pages:
         if first_match(p['text'], patterns):
@@ -117,7 +136,8 @@ def build_report(pages):
 
     for label, patterns in CHECKS:
         present = first_match(text, patterns)
-        page = page_for_term(pages, patterns)
+        evidence = evidence_for_term(pages, patterns)
+        page = evidence['page'] if evidence else None
         if present:
             found_count += 1
             status = 'Information found'
@@ -130,7 +150,7 @@ def build_report(pages):
             attention_count += 1
             status = 'Information not found'
             note = f'No clear {label.lower()} reference was found in the extracted quotation text.'
-        findings.append({'label': label, 'status': status, 'note': note, 'page': page})
+        findings.append({'label': label, 'status': status, 'note': note, 'page': page, 'evidence': evidence['text'] if evidence else None})
 
     amounts = find_amounts(text)
     if len(amounts) >= 2:
