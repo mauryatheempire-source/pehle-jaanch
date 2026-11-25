@@ -413,10 +413,57 @@ def build_report(pages):
         }
 
     questions = questions_from_findings(findings, red_flags, payment_percentages)
-    top_3 = sorted(
-        [x for x in findings if x['status'] == STATUS_LABELS['needs_clarification']],
-        key=lambda x: (x['label'] not in ('Red', 'Extra / actuals charges'), x['label'])
-    )[:3]
+
+    # Surface the highest-risk, unresolved findings first. This is deliberately
+    # based only on findings actually produced from the uploaded quotation.
+    priority_weights = {
+        'Extra / actuals charges': 6,
+        'Open-ended client scope': 5,
+        'Substitution wording': 5,
+        'Payment terms': 4,
+        'Payment milestones': 4,
+        'Payment percentage cross-check': 4,
+        'Commercial price': 3,
+        'Exclusions': 3,
+        'Warranty': 3,
+        'Completion and delay terms': 3,
+        'Freight, installation and other charges': 3,
+        'Performance / output': 3,
+        'Technical details': 2,
+        'Taxes': 2,
+        'Scope': 2,
+        'Timeline': 2,
+        'GST treatment': 2,
+        'Item-wise BOQ / price breakup': 2,
+    }
+    priority_candidates = [
+        x for x in findings
+        if x['status'] in (STATUS_LABELS['needs_clarification'], STATUS_LABELS['could_not_read'])
+    ]
+    priority_candidates.sort(
+        key=lambda x: (
+            1 if x['status'] == STATUS_LABELS['needs_clarification'] else 0,
+            priority_weights.get(x['label'], 1),
+            x['label']
+        ),
+        reverse=True
+    )
+    top_3 = []
+    seen_labels = set()
+    for x in priority_candidates:
+        if x['label'] in seen_labels:
+            continue
+        seen_labels.add(x['label'])
+        top_3.append({
+            'label': x['label'],
+            'status': x['status'],
+            'note': x['note'],
+            'action': x.get('question') or x.get('guidance', {}).get('ask_epc') or x['note'],
+            'page': x.get('page'),
+            'evidence': x.get('evidence')
+        })
+        if len(top_3) == 3:
+            break
 
     return {
         'id': str(uuid.uuid4()),
