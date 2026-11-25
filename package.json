@@ -1,0 +1,7 @@
+{
+  "name":"pehle-jaanch-layout-check",
+  "private":true,
+  "type":"module",
+  "scripts":{"measure:layout":"node scripts/measure-layout.mjs"},
+  "devDependencies":{"playwright":"^1.56.0"}
+}
