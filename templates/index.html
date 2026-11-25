@@ -170,6 +170,8 @@
     <div class="heroActions">
       <button class="cta" type="button" id="choose">Upload My EPC Quotation <span>→</span></button>
       <span class="microTrust">PDF • Preliminary review • No company rating</span>
+      <form id="form" class="hiddenUploadForm"><input class="fileinput" id="quotation" type="file" name="quotation" accept="application/pdf,.pdf" required></form>
+      <div class="loading" id="loading" aria-live="polite"></div><div class="error" id="error"></div>
     </div>
   </div>
   <div class="heroProduct">
@@ -197,12 +199,12 @@
       <p>Learn what a plant involves, its major systems, infrastructure, commercial heads and the questions worth asking.</p>
     </div>
     <div class="projectGrid">
-      <a class="projectCard" href="#projects"><span class="projectIcon">☀</span><div><b>Solar</b><p>Utility-scale, rooftop, floating, hybrid & storage</p></div><span class="projectArrow">→</span></a>
-      <a class="projectCard" href="#projects"><span class="projectIcon">♻</span><div><b>CBG / Biogas</b><p>Feedstock, digestion, gas upgrading & compression</p></div><span class="projectArrow">→</span></a>
-      <a class="projectCard" href="#projects"><span class="projectIcon">💧</span><div><b>STP / ETP / WTP</b><p>Capacity, treatment process, reuse & utilities</p></div><span class="projectArrow">→</span></a>
-      <a class="projectCard" href="#projects"><span class="projectIcon">⚡</span><div><b>BESS / Hybrid</b><p>Storage, solar-wind integration & evacuation</p></div><span class="projectArrow">→</span></a>
-      <a class="projectCard" href="#projects"><span class="projectIcon">🔥</span><div><b>Pyrolysis</b><p>Feedstock, reactor, products, utilities & emissions</p></div><span class="projectArrow">→</span></a>
-      <a class="projectCard" href="#projects"><span class="projectIcon">🏭</span><div><b>Industrial EPC</b><p>Process plants, utilities, machinery & infrastructure</p></div><span class="projectArrow">→</span></a>
+      <a class="projectCard" href="/projects/solar"><span class="projectIcon">☀</span><div><b>Solar</b><p>Utility-scale, rooftop, floating, hybrid & storage</p></div><span class="projectArrow">→</span></a>
+      <a class="projectCard" href="/projects/cbg"><span class="projectIcon">♻</span><div><b>CBG / Biogas</b><p>Feedstock, digestion, gas upgrading & compression</p></div><span class="projectArrow">→</span></a>
+      <a class="projectCard" href="/projects/water"><span class="projectIcon">💧</span><div><b>STP / ETP / WTP</b><p>Capacity, treatment process, reuse & utilities</p></div><span class="projectArrow">→</span></a>
+      <a class="projectCard" href="/projects/bess"><span class="projectIcon">⚡</span><div><b>BESS / Hybrid</b><p>Storage, solar-wind integration & evacuation</p></div><span class="projectArrow">→</span></a>
+      <a class="projectCard" href="/projects/pyrolysis"><span class="projectIcon">🔥</span><div><b>Pyrolysis</b><p>Feedstock, reactor, products, utilities & emissions</p></div><span class="projectArrow">→</span></a>
+      <a class="projectCard" href="/projects/industrial"><span class="projectIcon">🏭</span><div><b>Industrial EPC</b><p>Process plants, utilities, machinery & infrastructure</p></div><span class="projectArrow">→</span></a>
     </div>
     <div class="projectMeta">
       <div><b>Project information</b><span>Completed • Ongoing • Tendered • Announced</span></div>
