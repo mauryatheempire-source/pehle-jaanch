@@ -503,6 +503,10 @@ PROJECTS = {
 def home():
     return render_template('index.html')
 
+@app.get('/gate')
+def gate():
+    return render_template('gate.html')
+
 @app.get('/projects')
 def projects():
     return render_template('projects.html', projects=PROJECTS)
