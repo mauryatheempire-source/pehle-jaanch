@@ -35,7 +35,7 @@ main{padding:34px 0 70px}.intro{max-width:700px;margin:0 auto 24px;text-align:ce
 <section class="result" id="result">
 <span class="resultBadge" id="resultBadge"></span><h2 id="resultTitle"></h2><p class="resultLead" id="resultLead"></p>
 <div class="reasonList" id="reasons"></div>
-<div class="next"><b>Before you pay</b><ul id="nextSteps"></ul></div>
+<div class="next"><b>Before you pay</b><ul id="nextSteps"></ul></div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px"><button class="btn primary" id="restartBtn" type="button">Start again</button><a class="btn" href="/">Review a quotation</a></div>
 </section>
 <p class="disclaimer">This checklist supports your judgement. It is not legal, engineering or financial advice.</p>
 </main>
@@ -103,6 +103,7 @@ function calculate(){
  $("questionCard").style.display="none";$("progressWrap").style.display="none";$("result").style.display="block";window.scrollTo({top:0,behavior:"smooth"});
 }
 $("nextBtn").addEventListener("click",()=>{if(index<QUESTIONS.length-1){index++;render();}else calculate();});
+$("restartBtn").addEventListener("click",()=>{answers={};index=0;$("result").style.display="none";$("progressWrap").style.display="block";$("questionCard").style.display="block";render();window.scrollTo({top:0,behavior:"smooth"});});
 $("backBtn").addEventListener("click",()=>{if(index>0){index--;render();}});
 render();
 </script>
