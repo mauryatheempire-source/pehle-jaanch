@@ -190,6 +190,105 @@
 .deleteMessage{display:none;margin-top:10px;padding:9px 11px;border-radius:9px;background:#edf8f2;border:1px solid #cfe9da;color:#246844;font-size:11px}
 @media(max-width:800px){.trustIntro{display:block}.trustIntro p{max-width:none;margin-top:12px}.trustGrid{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.trustSection{margin-top:46px}.trustIntro h2{font-size:25px}.trustGrid{grid-template-columns:1fr}.privacyActions{align-items:flex-start;flex-direction:column}}
+
+/* ALIGNMENT PASS — layout only */
+@media(min-width:901px){
+  .container{width:min(1200px,calc(100% - 64px));margin-left:auto;margin-right:auto}
+  .nav{height:72px}
+  .navinner{min-height:72px}
+  .hero{padding:64px 0 72px;min-height:0}
+  .hero>.container{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(360px,1fr);gap:64px;align-items:center}
+  .heroCenter{max-width:none;margin:0;text-align:left}
+  .heroCenter .eyebrow{margin-bottom:16px}
+  .heroCenter h1{margin:0 0 16px}
+  .heroLead{max-width:660px;margin:0}
+  .heroActions{justify-content:flex-start;margin:24px 0 0;gap:12px;flex-wrap:nowrap}
+  .microTrust{white-space:nowrap}
+  .benefitStrip{width:100%;margin:0;display:grid;grid-template-columns:1fr;gap:0;background:transparent;border:0;border-radius:0;overflow:visible}
+  .benefitStrip>div{min-height:112px;padding:24px;border:1px solid #dce5ee;border-radius:16px;background:#fff;align-items:flex-start}
+  .benefitStrip>div+div{border-left:1px solid #dce5ee;margin-top:16px}
+  .projectExplore,.projectWatch,.howItWorks,.trustSection{width:100%;margin-left:0;margin-right:0}
+  .projectExplore{margin-top:72px}
+  .projectWatch{margin-top:72px;padding-top:32px}
+  .howItWorks{margin-top:72px}
+  .trustSection{margin-top:72px}
+  .projectGrid,.watchGrid,.howGrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+  .projectCard,.watchCard,.howStep,.trustCard{border-radius:16px;padding:24px}
+  .projectCard{min-height:156px}
+  .projectGrid{grid-auto-rows:1fr}
+  .projectMeta{gap:24px;margin-top:24px}
+  .projectMeta>div{padding:24px}
+  .watchGrid{margin-top:32px}
+  .watchCard{min-height:156px}
+  .howGrid{margin-top:32px}
+  .howStep{min-height:156px}
+  .trustGrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-top:32px}
+  .trustCard{min-height:190px}
+  .report{padding:72px 0}
+  .report .reporthead,.report .card,.beforePay,.paymentExposure{border-radius:16px}
+  .report .reporthead,.report .card{padding:24px}
+  .resultSummary{grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin:24px 0}
+  .resultCard{min-height:128px;padding:24px}
+  .report-nav{margin:24px 0}
+  .resultTableWrap,.commercialTableWrap{overflow:visible}
+  .resultTable{min-width:0;table-layout:fixed}
+  .resultTable th,.resultTable td{padding:20px 12px}
+  .resultTable th:nth-child(1),.resultTable td:nth-child(1){width:170px}
+  .resultTable th:nth-child(2),.resultTable td:nth-child(2){width:190px}
+  .resultTable th:nth-child(3),.resultTable td:nth-child(3){width:auto}
+  .resultTable th:nth-child(4),.resultTable td:nth-child(4){width:340px}
+  .resultTable td:nth-child(2){white-space:normal}
+  .tableEvidence{margin-top:12px}
+  .figureGrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+  .questionGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+  .questionCard{min-height:112px;padding:24px}
+}
+@media(min-width:601px) and (max-width:900px){
+  .container{width:calc(100% - 48px)}
+  .nav{height:72px}
+  .hero{padding:48px 0 64px}
+  .hero>.container{display:grid;grid-template-columns:1fr;gap:32px}
+  .heroCenter{text-align:left;max-width:720px;margin:0}
+  .benefitStrip{width:100%;margin-top:0}
+  .projectExplore,.projectWatch,.howItWorks,.trustSection{width:100%;margin-left:0;margin-right:0}
+  .projectExplore,.projectWatch,.howItWorks,.trustSection{margin-top:64px}
+  .projectGrid,.watchGrid,.howGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+  .projectMeta{grid-template-columns:1fr 1fr;gap:24px}
+  .trustGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+  .resultSummary{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+  .questionGrid{grid-template-columns:1fr 1fr;gap:24px}
+}
+@media(max-width:600px){
+  .container{width:calc(100% - 32px)}
+  .hero{padding:32px 0 48px}
+  .heroCenter{text-align:left}
+  .heroActions{justify-content:flex-start;align-items:stretch}
+  .heroActions .cta{min-height:44px}
+  .benefitStrip{width:100%;margin-top:24px}
+  .projectExplore,.projectWatch,.howItWorks,.trustSection{width:100%;margin-left:0;margin-right:0}
+  .projectExplore,.projectWatch,.howItWorks,.trustSection{margin-top:48px}
+  .projectGrid,.watchGrid,.howGrid,.trustGrid{grid-template-columns:1fr;gap:16px}
+  .projectMeta{grid-template-columns:1fr;gap:16px}
+  .projectCard,.watchCard,.howStep,.trustCard{padding:24px}
+  .report{padding:48px 0}
+  .resultSummary{grid-template-columns:1fr 1fr;gap:16px}
+  .report .reporthead,.report .card,.beforePay,.paymentExposure{padding:16px}
+  .resultTableWrap,.commercialTableWrap{overflow:visible;border:0;border-radius:0}
+  .resultTable{min-width:0;width:100%;table-layout:auto}
+  .resultTable thead{display:none}
+  .resultTable tbody,.resultTable tr,.resultTable td{display:block;width:100%}
+  .resultTable tr{border:1px solid #e1e8f0;border-radius:14px;background:#fff;margin-bottom:16px;padding:16px}
+  .resultTable td{border:0;padding:6px 0;white-space:normal!important}
+  .resultTable td:first-child{width:auto;font-size:14px}
+  .resultTable td:nth-child(2),.resultTable td:nth-child(3),.resultTable td:last-child{width:auto}
+  .resultTable td:first-child:before,.resultTable td:nth-child(2):before,.resultTable td:nth-child(3):before,.resultTable td:nth-child(4):before{display:block;margin-bottom:4px;font-size:10px;font-weight:850;letter-spacing:.4px;text-transform:uppercase;color:#738398}
+  .resultTable td:first-child:before{content:"Check"}
+  .resultTable td:nth-child(2):before{content:"Status"}
+  .resultTable td:nth-child(3):before{content:"What we found"}
+  .resultTable td:nth-child(4):before{content:"Next step"}
+  .resultTable .tableEvidence{margin-top:8px}
+  .figureGrid,.questionGrid{grid-template-columns:1fr;gap:16px}
+}
 </style>
 </head>
 <body>
