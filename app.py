@@ -205,52 +205,233 @@ def commercial_review(pages, text):
         checks.append(add_impact_guidance({'label':'Payment percentage cross-check','status':'Not calculated','note':'No payment percentages could be confidently isolated from the extracted text. Check the payment table manually.','page':None,'evidence':None}))
     return checks
 
+
+STATUS_LABELS = {
+    'found': 'Found',
+    'needs_clarification': 'Needs clarification',
+    'not_mentioned': 'Not mentioned',
+    'could_not_read': 'Could not read',
+}
+
+RED_FLAG_RULES = [
+    ('Substitution wording', [r'\bequivalent\b', r'\bor similar\b', r'\bor approved make\b'],
+     'Equipment may be substituted without the quotation fixing the exact make/model. Confirm the permitted substitute, technical equivalence and approval process before paying.'),
+    ('Open-ended client scope', [r'\bany other\b', r'\bas required\b'],
+     'The scope may be open-ended. Confirm exactly what is included, who pays for it and whether the EPC price changes when an unspecified item is required.'),
+    ('Extra / actuals charges', [r'\bextra\b', r'\bat actuals\b'],
+     'A cost may be payable in addition to the quoted amount. Confirm the exact amount or pricing method and whether the item is already included in the total.'),
+]
+
+def parse_money(raw):
+    s = re.sub(r'[^0-9.]', '', raw.replace(',', ''))
+    try:
+        return float(s)
+    except ValueError:
+        return None
+
+def money_context_label(text, start, end):
+    context = text[max(0, start - 100):min(len(text), end + 100)]
+    if re.search(r'grand total|total project cost|total amount|total payable|contract value|project value', context, re.I):
+        return 'total'
+    if re.search(r'subtotal|component|item|line item|advance|milestone|tax|gst|freight|installation|equipment', context, re.I):
+        return 'component'
+    return 'unclear'
+
+def find_money_details(pages):
+    pattern = r'(?:₹|Rs\.?|INR)\s*[0-9][0-9,]*(?:\.\d+)?'
+    figures = []
+    for p in pages:
+        text = p['text'] or ''
+        for m in re.finditer(pattern, text, re.I):
+            raw = re.sub(r'\s+', ' ', m.group(0)).strip()
+            value = parse_money(raw)
+            if value is None:
+                continue
+            start = max(0, m.start() - 100)
+            end = min(len(text), m.end() + 100)
+            excerpt = re.sub(r'\s+', ' ', text[start:end]).strip()
+            figures.append({
+                'raw': raw, 'value': value, 'label': money_context_label(text, m.start(), m.end()),
+                'page': p['page'], 'evidence': excerpt
+            })
+    unique = []
+    seen = set()
+    for f in figures:
+        key = (f['raw'], f['page'])
+        if key not in seen:
+            seen.add(key)
+            unique.append(f)
+    return unique[:20]
+
+def money_relationships(figures):
+    relations = []
+    for i, target in enumerate(figures):
+        for j in range(len(figures)):
+            if j == i:
+                continue
+            for k in range(j + 1, len(figures)):
+                if k == i:
+                    continue
+                a, b = figures[j], figures[k]
+                if abs((a['value'] + b['value']) - target['value']) < 0.01 and a['value'] and b['value']:
+                    relations.append({
+                        'total': target['raw'], 'components': [a['raw'], b['raw']],
+                        'text': f"{target['raw']} equals {a['raw']} plus {b['raw']}.",
+                        'pages': sorted(set([target['page'], a['page'], b['page']]))
+                    })
+    # Avoid repeated A+B / B+A relations.
+    out, seen = [], set()
+    for r in relations:
+        key = (r['total'], tuple(sorted(r['components'])))
+        if key not in seen:
+            seen.add(key); out.append(r)
+    return out
+
+def evaluate_check(label, pages, text):
+    patterns = dict(CHECKS).get(label, [])
+    evidence = evidence_for_term(pages, patterns)
+    keyword_present = first_match(text, patterns)
+    readable = all(len((p['text'] or '').strip()) >= 30 for p in pages)
+    if not keyword_present and not readable:
+        return STATUS_LABELS['could_not_read'], 'The relevant part of the file could not be read reliably.', None
+    if not keyword_present:
+        return STATUS_LABELS['not_mentioned'], f'No clear {label.lower()} reference was found in the readable quotation text.', None
+    if label == 'Warranty':
+        duration = re.search(r'\b(?:\d+\s*(?:year|years|yr|yrs|month|months))\b', text, re.I)
+        coverage = re.search(r'cover(?:ed|age)|parts?|labou?r|workmanship|defect', text, re.I)
+        start = re.search(r'(?:from|after|start(?:ing)?).*?(?:commission|handover|delivery|installation)', text, re.I)
+        if not (duration and coverage and start):
+            return STATUS_LABELS['needs_clarification'], 'Warranty is mentioned, but the duration, coverage and start point are not all clearly stated together.', evidence
+    return STATUS_LABELS['found'], f'{label} is clearly referenced in the quotation.', evidence
+
+def find_red_flags(pages):
+    flags = []
+    for title, patterns, explanation in RED_FLAG_RULES:
+        ev = evidence_for_term(pages, patterns)
+        if ev:
+            severity = 'Red' if title == 'Extra / actuals charges' else 'Amber'
+            flags.append({
+                'label': title, 'status': STATUS_LABELS['needs_clarification'],
+                'severity': severity, 'note': explanation,
+                'page': ev['page'], 'evidence': ev['text']
+            })
+    return flags
+
+def extract_payment_percentages(pages):
+    out = []
+    for p in pages:
+        text = p['text'] or ''
+        for m in re.finditer(r'(\d+(?:\.\d+)?)\s*%', text):
+            context = re.sub(r'\s+', ' ', text[max(0, m.start()-130):min(len(text), m.end()+180)]).strip()
+            if re.search(r'payment|advance|milestone|dispatch|delivery|commissioning|order|balance', context, re.I):
+                out.append({'percentage': float(m.group(1)), 'page': p['page'], 'excerpt': context})
+    return out
+
+def questions_from_findings(findings, red_flags, payment_percentages):
+    questions = []
+    for item in findings + red_flags:
+        if item.get('status') == STATUS_LABELS['needs_clarification']:
+            q = item.get('question') or item.get('guidance', {}).get('ask_epc')
+            if q:
+                questions.append(q)
+    if payment_percentages:
+        questions.append('Please confirm each payment percentage shown in the quotation, the amount it represents, and the deliverable/acceptance evidence required before payment.')
+    # Keep one question per finding while removing exact duplicates.
+    seen = set(); out = []
+    for q in questions:
+        if q not in seen:
+            seen.add(q); out.append(q)
+    return out
+
 def build_report(pages):
     text = '\n'.join(p['text'] for p in pages)
     project = detect_project(text)
     findings = []
-    found_count = 0
-    attention_count = 0
-    question_count = len(QUESTIONS.get(project, QUESTIONS['General EPC']))
+    found_count = attention_count = 0
 
     for label, patterns in CHECKS:
-        present = first_match(text, patterns)
-        evidence = evidence_for_term(pages, patterns)
-        page = evidence['page'] if evidence else None
-        if present:
+        status, note, evidence = evaluate_check(label, pages, text)
+        if status == STATUS_LABELS['found']:
             found_count += 1
-            status = 'Information found'
-            note = f'{label} is mentioned in the quotation.'
-            if label in ('Performance / output', 'Payment terms', 'Scope', 'Exclusions'):
-                status = 'Needs clarification'
-                attention_count += 1
-                note = f'{label} is mentioned, but the wording should be checked against the final scope/contract.'
-        else:
+        elif status in (STATUS_LABELS['needs_clarification'], STATUS_LABELS['not_mentioned'], STATUS_LABELS['could_not_read']):
             attention_count += 1
-            status = 'Information not found'
-            note = f'No clear {label.lower()} reference was found in the extracted quotation text.'
-        findings.append(add_impact_guidance({'label': label, 'status': status, 'note': note, 'page': page, 'evidence': evidence['text'] if evidence else None}))
+        item = {
+            'label': label, 'status': status, 'note': note,
+            'page': evidence['page'] if evidence else None,
+            'evidence': evidence['text'] if evidence else None
+        }
+        if label == 'Warranty':
+            item['question'] = 'What is the warranty duration, exactly what does it cover, and from which date does it start?'
+        findings.append(add_impact_guidance(item))
 
-    amounts = find_amounts(text)
+    amounts = find_money_details(pages)
+    relations = money_relationships(amounts)
+    red_flags = find_red_flags(pages)
+    payment_percentages = extract_payment_percentages(pages)
+
     commercial_checks = commercial_review(pages, text)
-    if len(amounts) >= 2:
-        arithmetic = 'Multiple monetary figures found; line-item reconciliation is recommended.'
-    elif len(amounts) == 1:
-        arithmetic = 'A total/monetary figure was found; reconcile it with the detailed BOQ before approval.'
+    # Normalize commercial status vocabulary.
+    for item in commercial_checks:
+        if item['status'] == 'Found in quotation':
+            item['status'] = STATUS_LABELS['found']
+        elif item['status'] == 'Not clearly found':
+            item['status'] = STATUS_LABELS['not_mentioned']
+        elif item['status'] in ('Review figures', 'Not calculated'):
+            item['status'] = STATUS_LABELS['needs_clarification']
+
+    # Add red-flag findings to the main report so they are not buried in commercial checks.
+    for flag in red_flags:
+        findings.append(add_impact_guidance({
+            'label': flag['label'], 'status': flag['status'], 'note': flag['note'],
+            'page': flag['page'], 'evidence': flag['evidence'],
+            'question': (
+                'Please confirm the exact permitted equipment makes/models and substitution approval process.'
+                if flag['label'] == 'Substitution wording' else
+                'Please define every open-ended client-scope item, responsibility and cost before payment.'
+                if flag['label'] == 'Open-ended client scope' else
+                'Please confirm which extra/actuals charges are included in the quoted total and give the pricing method for anything outside it.'
+            )
+        }))
+
+    # Re-count after red flags.
+    found_count = sum(x['status'] == STATUS_LABELS['found'] for x in findings)
+    attention_count = sum(x['status'] != STATUS_LABELS['found'] for x in findings)
+
+    if amounts:
+        arithmetic = 'No exact sum relationship was found among the extracted monetary figures.' if not relations else ' '.join(r['text'] for r in relations)
     else:
-        arithmetic = 'No clear monetary figure was extracted.'
+        arithmetic = 'No clear monetary figure was extracted from readable text.'
+
+    total_figures = [x for x in amounts if x['label'] == 'total']
+    component_figures = [x for x in amounts if x['label'] == 'component']
+    exposure = None
+    if total_figures and payment_percentages:
+        exposure_pct = sum(x['percentage'] for x in payment_percentages)
+        exposure = {
+            'payment_percentage_before_delivery_or_work': exposure_pct,
+            'basis': 'Payment percentages found near payment-related wording; confirm the stage definitions in the original quotation.'
+        }
+
+    questions = questions_from_findings(findings, red_flags, payment_percentages)
+    top_3 = sorted(
+        [x for x in findings if x['status'] == STATUS_LABELS['needs_clarification']],
+        key=lambda x: (x['label'] not in ('Red', 'Extra / actuals charges'), x['label'])
+    )[:3]
 
     return {
         'id': str(uuid.uuid4()),
-        'project': project,
-        'pages': len(pages),
-        'text_chars': len(text),
-        'summary': f'Preliminary review of the uploaded quotation for {project}. This report highlights information found, areas needing clarification, and questions to discuss with the EPC provider.',
-        'metrics': {'found': found_count, 'attention': attention_count, 'questions': question_count},
-        'findings': findings,
-        'questions': QUESTIONS.get(project, QUESTIONS['General EPC']),
-        'amounts': amounts,
+        'project': project, 'pages': len(pages), 'text_chars': len(text),
+        'summary': f'Preliminary review of the uploaded quotation for {project}. This checklist separates what the readable document says from points that still need clarification or could not be read reliably.',
+        'metrics': {'found': found_count, 'attention': attention_count, 'questions': len(questions)},
+        'findings': findings, 'questions': questions,
+        'amounts': [x['raw'] for x in amounts],
+        'amount_details': amounts,
+        'amount_relationships': relations,
         'commercial_checks': commercial_checks,
+        'payment_percentages': payment_percentages,
+        'payment_exposure': exposure,
+        'before_you_pay': top_3,
+        'red_flags': red_flags,
         'arithmetic': arithmetic,
         'extracted_text': text[:30000],
     }
