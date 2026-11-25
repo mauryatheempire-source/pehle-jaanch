@@ -32,6 +32,12 @@ class ReportLogicTests(unittest.TestCase):
         self.assertTrue(r["before_you_pay"][0]["action"])
         self.assertLessEqual(len(r["before_you_pay"]), 3)
 
+    def test_payment_exposure_counts_only_early_stages(self):
+        r = build_report(pages("Total project cost: ₹10,00,000. Payment: 40% advance, 30% on delivery, 20% on installation, 10% on commissioning."))
+        self.assertEqual(r["payment_exposure"]["payment_percentage_before_delivery_or_work"], 40.0)
+        self.assertEqual(r["payment_exposure"]["payment_amount_before_delivery_or_work"], 400000.0)
+        self.assertEqual([x["stage"] for x in r["payment_percentages"]], ["Before delivery/work", "Delivery/work stage", "Delivery/work stage", "Delivery/work stage"])
+
     def test_payment_percentages_are_listed(self):
         r = build_report(pages("Payment: 40% advance, 30% on delivery, 20% on installation, 10% on commissioning."))
         self.assertEqual([x["percentage"] for x in r["payment_percentages"]], [40.0, 30.0, 20.0, 10.0])
