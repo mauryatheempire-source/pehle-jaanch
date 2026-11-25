@@ -268,12 +268,12 @@ PROJECTS = {
         'systems': ['PV modules', 'Inverters', 'Module mounting structures', 'DC/AC cabling', 'Transformers & switchgear', 'SCADA / monitoring', 'Civil works', 'Grid evacuation'],
         'checklist': ['Module make, model, wattage and warranty', 'Inverter make/model and capacity', 'Guaranteed generation and performance assumptions', 'Civil, evacuation and approval scope', 'Payment milestones tied to measurable deliverables', 'O&M, warranty and exclusions'],
         'projects': [
-            ('Nokh Solar Project', 'Rajasthan', '735 MW', 'Operational', 'NTPC published commissioned-project information'),
-            ('Bhadla-II Solar Project', 'Rajasthan', '500 MW', 'Operational', 'NTPC published operational-project information'),
-            ('Ramagundam Solar 3', 'Telangana', '176 MW', 'Operational', 'NTPC published commissioned-project information'),
-            ('Kalasar Solar Energy Project', 'Bikaner, Rajasthan', '650 MW solar component', 'Commercial operation in phases during 2026', 'NTPC corporate announcements'),
-            ('Bikaner I', 'Rajasthan', '300 MW', 'Under construction', 'NTPC future-capacity additions'),
-            ('Barethi', 'Madhya Pradesh', '630 MW', 'Under construction', 'NTPC future-capacity additions'),
+            ('Nokh Solar Project', 'Rajasthan', '735 MW', 'Operational', 'NTPC renewable-energy page', 'https://ntpc.co.in/power-generation/renewable-energy'),
+            ('Bhadla-II Solar Project', 'Rajasthan', '500 MW', 'Operational', 'NTPC renewable-energy page', 'https://ntpc.co.in/power-generation/renewable-energy'),
+            ('Ramagundam Solar 3', 'Telangana', '176 MW', 'Operational', 'NTPC corporate announcements', 'https://ntpc.co.in/investors/disclosures-announcements/corporate-announcements'),
+            ('Kalasar Solar Energy Project', 'Bikaner, Rajasthan', '650 MW solar component', 'Partly operational in 2026', 'NTPC corporate announcements', 'https://ntpc.co.in/investors/disclosures-announcements/corporate-announcements'),
+            ('Bikaner I', 'Rajasthan', '300 MW', 'Under construction', 'NTPC future capacity additions', 'https://ntpc.co.in/future-capacity-additions'),
+            ('Barethi', 'Madhya Pradesh', '630 MW', 'Under construction', 'NTPC future capacity additions', 'https://ntpc.co.in/future-capacity-additions'),
         ]
     },
     'cbg': {'name':'CBG / Biogas Projects','short':'CBG / Biogas','description':'Understand feedstock, digestion, gas upgrading, compression, utilities and output assumptions.','stats': [('Project lens','Feedstock → biogas → purification → CBG','Understand the process chain'),('Key commercial point','Output depends on feedstock','Check quantity, quality and operating assumptions'),('What to verify','Guaranteed production','Match assumptions to contract')],'systems':['Feedstock handling','Anaerobic digestion','Biogas cleaning','CO₂ / H₂S removal','Compression','Storage / dispensing','Digestate handling','Utilities & safety'],'checklist':['Feedstock quantity and quality assumptions','Guaranteed CBG output and uptime','Gas purification specification','Compression and storage scope','Digestate handling','Performance test and remedy terms'],'projects':[]},
