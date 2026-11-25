@@ -560,6 +560,13 @@ def analyze():
     executor.submit(run_analysis, job_id, file_bytes)
     return jsonify({'job_id': job_id}), 202
 
+@app.post('/api/delete/<job_id>')
+def delete_analysis(job_id):
+    with jobs_lock:
+        existed = job_id in jobs
+        jobs.pop(job_id, None)
+    return jsonify({'deleted': existed})
+
 @app.get('/api/status/<job_id>')
 def analysis_status(job_id):
     with jobs_lock:
