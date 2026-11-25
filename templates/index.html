@@ -60,7 +60,7 @@
 @media(max-width:800px){.projectHeading,.watchIntro{display:block}.projectHeading>p,.watchIntro p{max-width:none;margin-top:10px}.projectGrid{grid-template-columns:1fr 1fr}.watchGrid{grid-template-columns:1fr}.projectMeta{grid-template-columns:1fr}}
 @media(max-width:600px){.hero{padding:28px 0 45px}.heroCenter h1{font-size:34px;letter-spacing:-1px}.heroLead{font-size:14px}.heroActions .cta{font-size:13px}.benefitStrip{grid-template-columns:1fr}.benefitStrip>div+div{border-left:0;border-top:1px solid #e7edf3}.projectExplore,.projectWatch,.howItWorks{margin-top:40px}.projectGrid{grid-template-columns:1fr}.projectHeading h2,.watchIntro h2,.howTitle h2{font-size:21px}}
 /* Effective result dashboard */
-.resultSummary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:18px 0}
+.resultSummary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:18px 0}.beforePay{margin:18px 0 14px;padding:20px 21px;border:1px solid #f0d79a;border-radius:16px;background:linear-gradient(135deg,#fffaf0 0%,#fff 100%)}.beforePay h3{margin:0;font-size:18px;letter-spacing:-.2px;color:#6d4b00}.beforePayIntro{margin:6px 0 14px;font-size:12px;line-height:1.5;color:#75633d}.beforePayList{display:grid;gap:9px}.beforePayItem{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;padding:12px;background:#fff;border:1px solid #efdfb7;border-radius:11px}.beforePayNo{width:27px;height:27px;border-radius:8px;background:#fff0c9;color:#8a5d00;display:grid;place-items:center;font-size:11px;font-weight:900}.beforePayItem b{font-size:13px;color:#263b54}.beforePayStatus{display:inline-block;margin-left:7px;font-size:10px;font-weight:800;color:#a56c00;background:#fff5df;border-radius:20px;padding:4px 7px}.beforePayNote{margin:5px 0 0;font-size:12px;line-height:1.5;color:#596b80}.beforePayAction{margin:7px 0 0;font-size:12px;line-height:1.5;color:#24558f;font-weight:750}.beforePayEvidence{margin:7px 0 0;font-size:10px;color:#738398}@media(max-width:600px){.beforePay{padding:16px}.beforePayItem{grid-template-columns:27px minmax(0,1fr)}.beforePayStatus{display:block;width:max-content;margin:5px 0 0}}
 .resultCard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px 19px;box-shadow:0 5px 18px rgba(20,45,75,.035)}
 .resultCard .rcTop{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
 .resultCard .rcIcon{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:17px;background:#f2f5f8}
@@ -280,6 +280,12 @@
   <p id="rsummary"></p>
 </div>
 
+<div class="beforePay" id="beforePay" style="display:none">
+  <h3>Before you pay, resolve these 3 things</h3>
+  <p class="beforePayIntro">These are the highest-priority unresolved findings from this quotation. They are not a vendor rating.</p>
+  <div class="beforePayList" id="beforePayList"></div>
+</div>
+
 <div class="resultSummary" id="resultSummary"></div>
 
 <nav class="report-nav" aria-label="Report sections">
@@ -338,6 +344,8 @@ const I18N = {
     important:"Important:", importantText:"Pehle Jaanch kisi company ko “genuine” ya “scam” declare nahi karta. Yeh uploaded proposal ke text ko review karke areas for clarification aur independent verification ko highlight karta hai. Final engineering, legal, financial and commercial decisions should be independently verified.",
     footer:"Understand the proposal before you commit.",
     found:"Information found", clarifyStatus:"Needs clarification", missingStatus:"Information not found",
+    beforePayTitle:"Before you pay, resolve these 3 things", beforePayIntro:"These are the highest-priority unresolved findings from this quotation. They are not a vendor rating.",
+    beforePayAction:"Action:", couldNotRead:"Could not read",
     foundPage:"Found on page", excerpt:"Quotation excerpt · page",
     guidance:"Why this matters & what to do next", what:"What we found", why:"Why this matters", ask:"Ask the EPC company", verify:"Verify before signing",
     noFigures:"No clear monetary figures were extracted.",
@@ -369,6 +377,8 @@ const I18N = {
     important:"महत्वपूर्ण:", importantText:"पहले जाँच किसी company को “genuine” या “scam” घोषित नहीं करता। यह uploaded proposal के text को review करके clarification और independent verification वाले points को highlight करता है। Final engineering, legal, financial और commercial decisions independently verify किए जाने चाहिए।",
     footer:"Commit करने से पहले proposal को समझें।",
     found:"Information मिली", clarifyStatus:"Clarification चाहिए", missingStatus:"साफ़ तौर पर नहीं मिला",
+    beforePayTitle:"Payment करने से पहले इन 3 बातों को clear करें", beforePayIntro:"ये आपके quotation से निकले सबसे महत्वपूर्ण unresolved findings हैं। यह vendor rating नहीं है।",
+    beforePayAction:"क्या करें:", couldNotRead:"पढ़ा नहीं जा सका",
     foundPage:"Page पर मिला", excerpt:"Quotation excerpt · page",
     guidance:"यह क्यों महत्वपूर्ण है और आगे क्या करें", what:"हमने क्या पाया", why:"यह क्यों महत्वपूर्ण है", ask:"EPC company से पूछें", verify:"Sign करने से पहले verify करें",
     noFigures:"कोई स्पष्ट monetary figure extract नहीं हुआ।",
@@ -400,6 +410,8 @@ const I18N = {
     important:"महत्त्वाचे:", importantText:"पहिली जाँच कोणत्याही company ला “genuine” किंवा “scam” घोषित करत नाही. Uploaded proposal च्या text चे review करून clarification आणि independent verification आवश्यक असलेले points highlight केले जातात. Final engineering, legal, financial आणि commercial decisions स्वतंत्रपणे verify करावेत.",
     footer:"Commit करण्यापूर्वी proposal समजून घ्या.",
     found:"Information मिळाली", clarifyStatus:"Clarification आवश्यक", missingStatus:"स्पष्टपणे आढळले नाही",
+    beforePayTitle:"Payment करण्यापूर्वी या 3 गोष्टी clear करा", beforePayIntro:"तुमच्या quotation मधून निघालेले हे सर्वात महत्त्वाचे unresolved findings आहेत. हा vendor rating नाही.",
+    beforePayAction:"काय करावे:", couldNotRead:"वाचता आले नाही",
     foundPage:"Page वर आढळले", excerpt:"Quotation excerpt · page",
     guidance:"हे का महत्त्वाचे आहे आणि पुढे काय करावे", what:"आम्हाला काय आढळले", why:"हे का महत्त्वाचे आहे", ask:"EPC company ला विचारा", verify:"Sign करण्यापूर्वी verify करा",
     noFigures:"कोणताही स्पष्ट monetary figure extract झाला नाही.",
@@ -456,6 +468,8 @@ function applyLanguage(){
   const steps=document.querySelectorAll(".step");
   if(steps.length){steps[0].querySelector("b").textContent=t("yourQuotation");steps[0].querySelector("span:last-child").textContent=t("yourQuotationText");steps[1].querySelector("b").textContent=t("jaanch");steps[1].querySelector("span:last-child").textContent=t("jaanchText");steps[2].querySelector("b").textContent=t("better");steps[2].querySelector("span:last-child").textContent=t("betterText");}
   set("reportEyebrow","reportEyebrow");
+  const beforePayTitle=document.querySelector("#beforePay h3"); if(beforePayTitle)beforePayTitle.textContent=t("beforePayTitle");
+  const beforePayIntro=document.querySelector("#beforePay .beforePayIntro"); if(beforePayIntro)beforePayIntro.textContent=t("beforePayIntro");
   document.querySelector("#overview h3").textContent=t("atGlance");document.querySelector("#overview .uploadhint").textContent=t("atGlanceText");
   document.querySelector("#findingsCard h3").textContent=t("understand");document.querySelector("#findingsCard .uploadhint").textContent=t("understandText");
   document.querySelector("#commercialFigures h3").textContent=t("figures");document.querySelector("#commercialCard h3").textContent=t("commercial");document.querySelector("#commercialCard .uploadhint").textContent=t("commercialText");
@@ -485,6 +499,18 @@ function renderReport(r,scroll=true){
   const attention=items.filter(x=>x.status==="Needs clarification").length;
   const missing=items.filter(x=>x.status==="Not mentioned" || x.status==="Could not read").length;
   const qCount=(r.questions||[]).length;
+
+  const beforePay=document.getElementById("beforePay");
+  const beforePayList=document.getElementById("beforePayList");
+  const priorities=r.before_you_pay||[];
+  if(beforePay&&beforePayList){
+    beforePay.style.display=priorities.length?"block":"none";
+    beforePayList.innerHTML=priorities.map((x,i)=>{
+      const status=x.status==="Needs clarification"?t("clarifyStatus"):t("couldNotRead");
+      const evidence=x.evidence&&x.page?'<div class="beforePayEvidence">'+escapeHtml(t("excerpt"))+" "+escapeHtml(x.page)+"</div>":"";
+      return '<div class="beforePayItem"><div class="beforePayNo">'+String(i+1).padStart(2,"0")+'</div><div><b>'+escapeHtml(dt(x.label))+'</b><span class="beforePayStatus">'+escapeHtml(status)+'</span><p class="beforePayNote">'+escapeHtml(x.note||"")+'</p><p class="beforePayAction">'+escapeHtml(t("beforePayAction"))+" "+escapeHtml(x.action||"")+'</p>'+evidence+'</div></div>';
+    }).join("");
+  }
 
   const cards=[
     {cls:"found",icon:"✓",num:found,label:t("found")},
