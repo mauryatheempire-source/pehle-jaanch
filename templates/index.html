@@ -172,10 +172,28 @@
 .watchCard i{display:block;margin-top:14px;font-style:normal;color:#1769e8;font-size:11px;font-weight:800}
 @media(max-width:800px){.projectHeading,.watchIntro{display:block}.projectHeading>p,.watchIntro p{max-width:none;margin-top:12px}.projectGrid{grid-template-columns:1fr 1fr}.watchGrid{grid-template-columns:1fr}.projectMeta{grid-template-columns:1fr}}
 @media(max-width:600px){.siteNav{display:none}.projectGrid{grid-template-columns:1fr}.projectHeading h2,.watchIntro h2{font-size:25px}.projectExplore,.projectWatch{margin-top:52px}}
+
+/* Trust & privacy */
+.trustSection{width:min(1080px,100%);margin:58px auto 0;padding:28px 0 4px;border-top:1px solid #e4eaf1}
+.trustIntro{display:flex;justify-content:space-between;gap:28px;align-items:end}
+.trustIntro h2{font-size:30px;line-height:1.15;letter-spacing:-1px;margin:8px 0 0}
+.trustIntro p{max-width:390px;margin:0;color:#748398;font-size:12px;line-height:1.6}
+.trustGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:22px}
+.trustCard{border:1px solid #dce5ee;border-radius:15px;padding:18px;background:#fff}
+.trustCard b{display:block;font-size:13px;color:#263b54}
+.trustCard p{margin:7px 0 0;color:#687a8f;font-size:11px;line-height:1.55}
+.trustCard .trustIcon{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:#edf4ff;color:#1769e8;font-size:15px;font-weight:900;margin-bottom:12px}
+.privacyActions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:18px}
+.privacyButton{border:1px solid #cfe0f5;background:#fff;color:#24558f;border-radius:9px;padding:10px 14px;font-size:11px;font-weight:800;cursor:pointer}
+.privacyButton:hover{background:#f4f8ff}
+.privacyNote{font-size:10px;color:#8795a5;line-height:1.5}
+.deleteMessage{display:none;margin-top:10px;padding:9px 11px;border-radius:9px;background:#edf8f2;border:1px solid #cfe9da;color:#246844;font-size:11px}
+@media(max-width:800px){.trustIntro{display:block}.trustIntro p{max-width:none;margin-top:12px}.trustGrid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.trustSection{margin-top:46px}.trustIntro h2{font-size:25px}.trustGrid{grid-template-columns:1fr}.privacyActions{align-items:flex-start;flex-direction:column}}
 </style>
 </head>
 <body>
-<header class="nav"><div class="container navinner"><a class="brand" href="/" aria-label="Pehle Jaanch home">Pehle <span>Jaanch</span></a><div style="display:flex;align-items:center;gap:18px"><nav class="siteNav"><a href="/gate">Free Pehle Jaanch</a><a href="#projects">Projects</a><a href="#howItWorks">How it works</a><a href="#report">Check quotation</a></nav><label class="langWrap"><span id="navLanguage">Language</span><select id="languageSelect" aria-label="Choose language"><option value="en">English</option><option value="hi">हिन्दी</option><option value="mr">मराठी</option></select></label></div></div></header>
+<header class="nav"><div class="container navinner"><a class="brand" href="/" aria-label="Pehle Jaanch home">Pehle <span>Jaanch</span></a><div style="display:flex;align-items:center;gap:18px"><nav class="siteNav"><a href="/gate">Free Pehle Jaanch</a><a href="#projects">Projects</a><a href="#howItWorks">How it works</a><a href="#trust">Trust & privacy</a><a href="#report">Check quotation</a></nav><label class="langWrap"><span id="navLanguage">Language</span><select id="languageSelect" aria-label="Choose language"><option value="en">English</option><option value="hi">हिन्दी</option><option value="mr">मराठी</option></select></label></div></div></header>
 <main>
 <section class="hero">
 <div class="container">
@@ -233,6 +251,26 @@
       <div class="howStep"><span>03</span><div><b>Discuss</b><p>Use the questions and evidence before making a decision.</p></div></div>
     </div>
   </section>
+  
+  <section class="trustSection" id="trust">
+    <div class="trustIntro">
+      <div><span class="eyebrow" style="font-size:10px;padding:8px 12px">TRUST & PRIVACY</span><h2>Built for the buyer, not the EPC vendor.</h2></div>
+      <p>Pehle Jaanch is designed as an independent buyer-side check. The goal is to help you understand a proposal before you commit money or responsibility.</p>
+    </div>
+    <div class="trustGrid">
+      <div class="trustCard"><div class="trustIcon">B</div><b>Buyer-first</b><p>Vendor money does not buy a ranking, badge or preferred placement on Pehle Jaanch.</p></div>
+      <div class="trustCard"><div class="trustIcon">✓</div><b>What we check</b><p>We review what your quotation says and point out missing, unclear or independently verifiable items. We do not declare a company genuine or fraudulent.</p></div>
+      <div class="trustCard"><div class="trustIcon">PDF</div><b>Your quotation</b><p>The current app processes the uploaded PDF in memory for analysis. It is not written to permanent file storage by the quotation-review flow.</p></div>
+      <div class="trustCard"><div class="trustIcon">⌫</div><b>Delete your report</b><p>Your current report can be removed from this browser and its server-side analysis session can be cleared when a delete request is made.</p></div>
+    </div>
+    <div class="privacyActions">
+      <button class="privacyButton" type="button" id="deleteDataButton">Delete my current report</button>
+      <span class="privacyNote">No login is required for the quotation check. This tool is a checklist and document review, not legal, engineering or financial advice.</span>
+    </div>
+    <div class="deleteMessage" id="deleteMessage" aria-live="polite">Your current analysis session has been cleared.</div>
+  </section>
+
+</section>
 </div>
 </section>
 <section class="report" id="report"><div class="container">
@@ -302,7 +340,15 @@ const I18N = {
     found:"Information found", clarifyStatus:"Needs clarification", missingStatus:"Information not found",
     foundPage:"Found on page", excerpt:"Quotation excerpt · page",
     guidance:"Why this matters & what to do next", what:"What we found", why:"Why this matters", ask:"Ask the EPC company", verify:"Verify before signing",
-    noFigures:"No clear monetary figures were extracted."
+    noFigures:"No clear monetary figures were extracted.",
+    trustEyebrow:"TRUST & PRIVACY", trustTitle:"Built for the buyer, not the EPC vendor.",
+    trustIntro:"Pehle Jaanch is designed as an independent buyer-side check. The goal is to help you understand a proposal before you commit money or responsibility.",
+    buyerFirst:"Buyer-first", buyerFirstText:"Vendor money does not buy a ranking, badge or preferred placement on Pehle Jaanch.",
+    whatCheck:"What we check", whatCheckText:"We review what your quotation says and point out missing, unclear or independently verifiable items. We do not declare a company genuine or fraudulent.",
+    yourQuotationPrivacy:"Your quotation", yourQuotationPrivacyText:"The current app processes the uploaded PDF in memory for analysis. It is not written to permanent file storage by the quotation-review flow.",
+    deleteReport:"Delete your report", deleteReportText:"Your current report can be removed from this browser and its server-side analysis session can be cleared when a delete request is made.",
+    deleteButton:"Delete my current report", privacyNote:"No login is required for the quotation check. This tool is a checklist and document review, not legal, engineering or financial advice.",
+    deleteDone:"Your current analysis session has been cleared."
   },
   hi: {
     nav:"प्रस्ताव को समझें। फिर फैसला करें।", language:"भाषा",
@@ -325,7 +371,15 @@ const I18N = {
     found:"Information मिली", clarifyStatus:"Clarification चाहिए", missingStatus:"साफ़ तौर पर नहीं मिला",
     foundPage:"Page पर मिला", excerpt:"Quotation excerpt · page",
     guidance:"यह क्यों महत्वपूर्ण है और आगे क्या करें", what:"हमने क्या पाया", why:"यह क्यों महत्वपूर्ण है", ask:"EPC company से पूछें", verify:"Sign करने से पहले verify करें",
-    noFigures:"कोई स्पष्ट monetary figure extract नहीं हुआ।"
+    noFigures:"कोई स्पष्ट monetary figure extract नहीं हुआ।",
+    trustEyebrow:"TRUST & PRIVACY", trustTitle:"Buyer के लिए बनाया गया, EPC vendor के लिए नहीं।",
+    trustIntro:"Pehle Jaanch एक independent buyer-side check है। इसका उद्देश्य payment या commitment से पहले proposal को समझने में आपकी मदद करना है।",
+    buyerFirst:"Buyer-first", buyerFirstText:"Vendor का पैसा ranking, badge या preferred placement नहीं खरीद सकता।",
+    whatCheck:"हम क्या check करते हैं", whatCheckText:"हम quotation में लिखी बातों की समीक्षा करते हैं और missing, unclear या independently verify करने वाले points बताते हैं। हम किसी company को genuine या fraudulent घोषित नहीं करते।",
+    yourQuotationPrivacy:"आपका quotation", yourQuotationPrivacyText:"Current app uploaded PDF को analysis के लिए memory में process करता है। Quotation-review flow इसे permanent file storage में नहीं लिखता।",
+    deleteReport:"अपनी report delete करें", deleteReportText:"आपकी current report browser से हटाई जा सकती है और delete request पर server-side analysis session भी clear किया जा सकता है।",
+    deleteButton:"मेरी current report delete करें", privacyNote:"Quotation check के लिए login जरूरी नहीं है। यह checklist और document review है, legal, engineering या financial advice नहीं।",
+    deleteDone:"आपका current analysis session clear कर दिया गया है।"
   },
   mr: {
     nav:"प्रस्ताव समजून घ्या. मग निर्णय घ्या.", language:"भाषा",
@@ -348,7 +402,15 @@ const I18N = {
     found:"Information मिळाली", clarifyStatus:"Clarification आवश्यक", missingStatus:"स्पष्टपणे आढळले नाही",
     foundPage:"Page वर आढळले", excerpt:"Quotation excerpt · page",
     guidance:"हे का महत्त्वाचे आहे आणि पुढे काय करावे", what:"आम्हाला काय आढळले", why:"हे का महत्त्वाचे आहे", ask:"EPC company ला विचारा", verify:"Sign करण्यापूर्वी verify करा",
-    noFigures:"कोणताही स्पष्ट monetary figure extract झाला नाही."
+    noFigures:"कोणताही स्पष्ट monetary figure extract झाला नाही.",
+    trustEyebrow:"TRUST & PRIVACY", trustTitle:"Buyer साठी तयार केलेले, EPC vendor साठी नाही.",
+    trustIntro:"Pehle Jaanch हा independent buyer-side check आहे. Payment किंवा commitment करण्यापूर्वी proposal समजून घेण्यास तो मदत करतो.",
+    buyerFirst:"Buyer-first", buyerFirstText:"Vendor चे पैसे ranking, badge किंवा preferred placement खरेदी करू शकत नाहीत.",
+    whatCheck:"आम्ही काय check करतो", whatCheckText:"Quotation मध्ये काय लिहिले आहे ते review करून missing, unclear किंवा independently verify करायचे points दाखवतो. कोणत्याही company ला genuine किंवा fraudulent घोषित करत नाही.",
+    yourQuotationPrivacy:"तुमचे quotation", yourQuotationPrivacyText:"Current app uploaded PDF analysis साठी memory मध्ये process करते. Quotation-review flow ते permanent file storage मध्ये लिहित नाही.",
+    deleteReport:"तुमचा report delete करा", deleteReportText:"Current report browser मधून हटवता येतो आणि delete request केल्यावर server-side analysis session clear करता येतो.",
+    deleteButton:"माझा current report delete करा", privacyNote:"Quotation check साठी login आवश्यक नाही. हे checklist आणि document review आहे; legal, engineering किंवा financial advice नाही.",
+    deleteDone:"तुमचे current analysis session clear केले आहे."
   }
 };
 
@@ -378,6 +440,18 @@ function applyLanguage(){
   const hero=document.querySelector(".hero h1"); if(hero)hero.innerHTML=escapeHtml(t("hero"))+"<br><span>"+escapeHtml(t("hero2"))+"</span>";
   const intro=document.querySelector(".intro"); if(intro)intro.innerHTML=escapeHtml(t("intro")).replace(/^(Quotation[^.]*\.)/,"<strong>$1</strong>");
   const benefits=document.querySelectorAll(".benefit");
+  const trustEyebrow=document.querySelector(".trustSection .eyebrow"); if(trustEyebrow)trustEyebrow.textContent=t("trustEyebrow");
+  const trustTitle=document.querySelector(".trustIntro h2"); if(trustTitle)trustTitle.textContent=t("trustTitle");
+  const trustIntro=document.querySelector(".trustIntro p"); if(trustIntro)trustIntro.textContent=t("trustIntro");
+  const trustCards=document.querySelectorAll(".trustCard"); if(trustCards.length){
+    trustCards[0].querySelector("b").textContent=t("buyerFirst"); trustCards[0].querySelector("p").textContent=t("buyerFirstText");
+    trustCards[1].querySelector("b").textContent=t("whatCheck"); trustCards[1].querySelector("p").textContent=t("whatCheckText");
+    trustCards[2].querySelector("b").textContent=t("yourQuotationPrivacy"); trustCards[2].querySelector("p").textContent=t("yourQuotationPrivacyText");
+    trustCards[3].querySelector("b").textContent=t("deleteReport"); trustCards[3].querySelector("p").textContent=t("deleteReportText");
+  }
+  const db=document.getElementById("deleteDataButton"); if(db)db.textContent=t("deleteButton");
+  const pn=document.querySelector(".privacyNote"); if(pn)pn.textContent=t("privacyNote");
+
   if(benefits.length){benefits[0].innerHTML="<b>✓ "+escapeHtml(t("scope"))+"</b>"+escapeHtml(t("scopeText"));benefits[1].innerHTML="<b>✓ "+escapeHtml(t("terms"))+"</b>"+escapeHtml(t("termsText"));benefits[2].innerHTML="<b>✓ "+escapeHtml(t("questionsBenefit"))+"</b>"+escapeHtml(t("questionsText"));}
   const steps=document.querySelectorAll(".step");
   if(steps.length){steps[0].querySelector("b").textContent=t("yourQuotation");steps[0].querySelector("span:last-child").textContent=t("yourQuotationText");steps[1].querySelector("b").textContent=t("jaanch");steps[1].querySelector("span:last-child").textContent=t("jaanchText");steps[2].querySelector("b").textContent=t("better");steps[2].querySelector("span:last-child").textContent=t("betterText");}
@@ -459,6 +533,28 @@ function renderReport(r,scroll=true){
   if(scroll)document.getElementById("report").scrollIntoView({behavior:"smooth"});
 }
 const form=document.getElementById("form"),file=document.getElementById("quotation"),btn=document.getElementById("choose"),loading=document.getElementById("loading"),error=document.getElementById("error");
+const deleteDataButton=document.getElementById("deleteDataButton");
+const deleteMessage=document.getElementById("deleteMessage");
+let currentJobId=null;
+if(deleteDataButton){
+  deleteDataButton.addEventListener("click",async()=>{
+    try{
+      if(currentJobId){
+        await fetch("/api/delete/"+encodeURIComponent(currentJobId),{method:"POST"});
+        currentJobId=null;
+      }
+      window.lastReport=null;
+      document.getElementById("report").style.display="none";
+      document.getElementById("form").reset();
+      deleteMessage.style.display="block";
+      setTimeout(()=>deleteMessage.style.display="none",3500);
+    }catch(e){
+      deleteMessage.textContent="Could not clear the server analysis session. Please try again.";
+      deleteMessage.style.display="block";
+    }
+  });
+}
+
 btn.addEventListener("click",()=>file.click());
 file.addEventListener("change",()=>{if(file.files.length)form.requestSubmit()});
 form.addEventListener("submit",async e=>{
@@ -467,7 +563,7 @@ form.addEventListener("submit",async e=>{
   try{
     const res=await fetch("/api/analyze",{method:"POST",body:fd});const data=await res.json();
     if(!res.ok)throw new Error(data.error||"Upload failed");
-    const jobId=data.job_id;if(!jobId)throw new Error("The server did not start the analysis. Please try again.");
+    const jobId=data.job_id;if(!jobId)throw new Error("The server did not start the analysis. Please try again."); currentJobId=jobId;
     let finished=false;
     while(!finished){
       await new Promise(resolve=>setTimeout(resolve,1500));
