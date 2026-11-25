@@ -334,6 +334,13 @@
  .report-nav a{font-size:12px}
 }
 </style>
+<style>
+.reportMore{margin-top:14px;border-top:1px solid #e7edf3;padding-top:12px}
+.reportMore>summary{cursor:pointer;color:#24558f;font-size:14px;font-weight:800;min-height:44px;display:flex;align-items:center}
+.reportMore[open]>summary{margin-bottom:12px}
+.reportMore .resultTableWrap,.reportMore .commercialTableWrap{margin-top:8px}
+@media(max-width:600px){.reportMore>summary{font-size:14px;min-height:48px}}
+</style>
 </head>
 <body>
 <header class="nav"><div class="container navinner"><a class="brand" href="/" aria-label="Pehle Jaanch home">Pehle <span>Jaanch</span></a><div style="display:flex;align-items:center;gap:18px"><nav class="siteNav"><a href="/gate">Free Pehle Jaanch</a><a href="#projects">Projects</a><a href="#howItWorks">How it works</a><a href="#trust">Trust & privacy</a><a href="#report">Check quotation</a></nav><label class="langWrap"><span id="navLanguage">Language</span><select id="languageSelect" aria-label="Choose language"><option value="en">English</option><option value="hi">हिन्दी</option><option value="mr">मराठी</option></select></label></div></div></header>
@@ -454,7 +461,7 @@
 
 <div class="card" id="findingsCard">
   <div class="sectionTitle"><div><h3>Key findings</h3><p class="uploadhint">A simple view of what is mentioned, what needs attention, and what is not clearly found.</p></div></div>
-  <div class="resultTableWrap"><table class="resultTable"><thead><tr><th>Check</th><th>Status</th><th>What we found</th><th>Next step</th></tr></thead><tbody id="findingsTable"></tbody></table></div>
+  <div class="resultTableWrap"><table class="resultTable"><thead><tr><th>Check</th><th>Status</th><th>What we found</th><th>Next step</th></tr></thead><tbody id="findingsTable"></tbody></table></div><details class="reportMore" id="moreFindings"><summary id="moreFindingsLabel"></summary><div class="resultTableWrap"><table class="resultTable"><tbody id="moreFindingsTable"></tbody></table></div></details>
 </div>
 
 <div class="card" id="commercialFigures">
@@ -465,12 +472,12 @@
 
 <div class="card" id="commercialCard">
   <div class="sectionTitle"><div><h3>Commercial checks</h3><p class="uploadhint">Document checks — not independent verification or a final cost audit.</p></div></div>
-  <div class="commercialTableWrap"><table class="resultTable commercialTable"><thead><tr><th>Check</th><th>Status</th><th>What the quotation indicates</th><th>Action</th></tr></thead><tbody id="commercialTable"></tbody></table></div>
+  <details class="reportMore" id="commercialDetails"><summary id="commercialDetailsLabel"></summary><div class="commercialTableWrap"><table class="resultTable commercialTable"><thead><tr><th>Check</th><th>Status</th><th>What the quotation indicates</th><th>Action</th></tr></thead><tbody id="commercialTable"></tbody></table></div></details>
 </div>
 
 <div class="card" id="questionsCard">
   <div class="sectionTitle"><div><h3>Questions to discuss with the EPC provider</h3><p class="uploadhint">Use these questions in your next discussion before finalising the proposal.</p></div></div>
-  <div class="questionGrid" id="questions"></div>
+  <div class="questionGrid" id="questions"></div><details class="reportMore" id="moreQuestions"><summary id="moreQuestionsLabel"></summary><div class="questionGrid" id="extraQuestions"></div></details>
 </div>
 
 <div class="card"><div class="notice"><b>Important:</b> Pehle Jaanch kisi company ko “genuine” ya “scam” declare nahi karta. Yeh uploaded proposal ke text ko review karke areas for clarification aur independent verification ko highlight karta hai. Final engineering, legal, financial and commercial decisions should be independently verified.</div></div>
@@ -504,7 +511,7 @@ const I18N = {
     dueBefore:"Due before delivery/work", shareQuotation:"Share of quotation", paymentSchedule:"Payment stages found", earlyPayment:"Before delivery/work", deliveryWork:"Delivery/work stage", basis:"Basis:",
 
     foundPage:"Found on page", excerpt:"Quotation excerpt · page",
-    guidance:"Why this matters & what to do next", what:"What we found", why:"Why this matters", ask:"Ask the EPC company", verify:"Verify before signing",
+    guidance:"Why this matters & what to do next", moreFindings:"Show remaining findings", commercialDetails:"Show all commercial checks", moreQuestions:"Show remaining questions", what:"What we found", why:"Why this matters", ask:"Ask the EPC company", verify:"Verify before signing",
     noFigures:"No clear monetary figures were extracted.",
     trustEyebrow:"TRUST & PRIVACY", trustTitle:"Built for the buyer, not the EPC vendor.",
     trustIntro:"Pehle Jaanch is designed as an independent buyer-side check. The goal is to help you understand a proposal before you commit money or responsibility.",
@@ -540,7 +547,7 @@ const I18N = {
     dueBefore:"Delivery/work से पहले देय", shareQuotation:"Quotation का हिस्सा", paymentSchedule:"मिले हुए payment stages", earlyPayment:"Delivery/work से पहले", deliveryWork:"Delivery/work stage", basis:"आधार:",
 
     foundPage:"Page पर मिला", excerpt:"Quotation excerpt · page",
-    guidance:"यह क्यों महत्वपूर्ण है और आगे क्या करें", what:"हमने क्या पाया", why:"यह क्यों महत्वपूर्ण है", ask:"EPC company से पूछें", verify:"Sign करने से पहले verify करें",
+    guidance:"यह क्यों महत्वपूर्ण है और आगे क्या करें", moreFindings:"बाकी findings देखें", commercialDetails:"सभी commercial checks देखें", moreQuestions:"बाकी सवाल देखें", what:"हमने क्या पाया", why:"यह क्यों महत्वपूर्ण है", ask:"EPC company से पूछें", verify:"Sign करने से पहले verify करें",
     noFigures:"कोई स्पष्ट monetary figure extract नहीं हुआ।",
     trustEyebrow:"TRUST & PRIVACY", trustTitle:"Buyer के लिए बनाया गया, EPC vendor के लिए नहीं।",
     trustIntro:"Pehle Jaanch एक independent buyer-side check है। इसका उद्देश्य payment या commitment से पहले proposal को समझने में आपकी मदद करना है।",
@@ -576,7 +583,7 @@ const I18N = {
     dueBefore:"Delivery/work आधी देय", shareQuotation:"Quotation मधील हिस्सा", paymentSchedule:"मिळालेले payment stages", earlyPayment:"Delivery/work आधी", deliveryWork:"Delivery/work stage", basis:"आधार:",
 
     foundPage:"Page वर आढळले", excerpt:"Quotation excerpt · page",
-    guidance:"हे का महत्त्वाचे आहे आणि पुढे काय करावे", what:"आम्हाला काय आढळले", why:"हे का महत्त्वाचे आहे", ask:"EPC company ला विचारा", verify:"Sign करण्यापूर्वी verify करा",
+    guidance:"हे का महत्त्वाचे आहे आणि पुढे काय करावे", moreFindings:"उर्वरित findings पहा", commercialDetails:"सर्व commercial checks पहा", moreQuestions:"उर्वरित प्रश्न पहा", what:"आम्हाला काय आढळले", why:"हे का महत्त्वाचे आहे", ask:"EPC company ला विचारा", verify:"Sign करण्यापूर्वी verify करा",
     noFigures:"कोणताही स्पष्ट monetary figure extract झाला नाही.",
     trustEyebrow:"TRUST & PRIVACY", trustTitle:"Buyer साठी तयार केलेले, EPC vendor साठी नाही.",
     trustIntro:"Pehle Jaanch हा independent buyer-side check आहे. Payment किंवा commitment करण्यापूर्वी proposal समजून घेण्यास तो मदत करतो.",
@@ -717,22 +724,29 @@ function renderReport(r,scroll=true){
   const total=Math.max(items.length,1);
   document.getElementById("overviewBars").innerHTML=groups.map(g=>'<div class="barrow"><b>'+escapeHtml(g.title)+'</b><div class="track"><div class="fill '+g.key+'" style="width:'+(g.items.length/total*100)+'%"></div></div><b>'+g.items.length+"</b></div>").join("");
 
-  const table=document.getElementById("findingsTable"); table.innerHTML="";
-  items.forEach(x=>{
+  const renderFinding=x=>{
     const cls=x.status==="Found"?"found":x.status==="Needs clarification"?"attention":"missing";
     const status=x.status==="Found"?t("found"):x.status==="Needs clarification"?t("clarifyStatus"):x.status==="Could not read"?"Could not read":t("missingStatus");
     const g=x.guidance||{};
     const evidence=x.evidence?'<div class="tableEvidence"><b>'+escapeHtml(t("excerpt"))+" "+escapeHtml(x.page||"")+'</b><br>“'+escapeHtml(x.evidence)+'”</div>':"";
     const guidance='<div class="miniGuidance"><details><summary>'+escapeHtml(t("guidance"))+'</summary><div class="mgBody"><b>'+escapeHtml(t("why"))+':</b> '+escapeHtml(g.why_it_matters||"")+"<br><b>"+escapeHtml(t("ask"))+':</b> '+escapeHtml(g.ask_epc||"")+"<br><b>"+escapeHtml(t("verify"))+':</b> '+escapeHtml(g.verify_before_signing||"")+"</div></details></div>";
-    table.innerHTML+='<tr><td>'+escapeHtml(dt(x.label))+'</td><td><span class="status '+cls+'">'+escapeHtml(status)+'</span></td><td>'+escapeHtml(x.note||"")+evidence+'</td><td><span class="tableAction">'+escapeHtml(g.ask_epc||g.verify_before_signing||x.note||"")+'</span>'+guidance+'</td></tr>';
-  });
+    return '<tr><td>'+escapeHtml(dt(x.label))+'</td><td><span class="status '+cls+'">'+escapeHtml(status)+'</span></td><td>'+escapeHtml(x.note||"")+evidence+'</td><td><span class="tableAction">'+escapeHtml(g.ask_epc||g.verify_before_signing||x.note||"")+'</span>'+guidance+'</td></tr>';
+  };
+  const visibleFindings=items.slice(0,5), remainingFindings=items.slice(5);
+  document.getElementById("findingsTable").innerHTML=visibleFindings.map(renderFinding).join("");
+  document.getElementById("moreFindingsTable").innerHTML=remainingFindings.map(renderFinding).join("");
+  document.getElementById("moreFindings").style.display=remainingFindings.length?"block":"none";
+  document.getElementById("moreFindingsLabel").textContent=t("moreFindings")+" ("+remainingFindings.length+")";
 
   const amounts=r.amounts||[];
   const fg=document.getElementById("figureGrid");
   fg.innerHTML=amounts.length?amounts.map((a,i)=>'<div class="figureItem"><div class="figureLabel">Figure '+(i+1)+'</div><div class="figureValue">'+escapeHtml(a)+'</div></div>').join(""):'<div class="figureItem"><div class="figureLabel">Commercial figures</div><div class="figureValue">'+escapeHtml(t("noFigures"))+'</div></div>';
 
   const ct=document.getElementById("commercialTable"); ct.innerHTML="";
-  (r.commercial_checks||[]).forEach(x=>{
+  const commercialItems=r.commercial_checks||[];
+  document.getElementById("commercialDetails").style.display=commercialItems.length?"block":"none";
+  document.getElementById("commercialDetailsLabel").textContent=t("commercialDetails")+" ("+commercialItems.length+")";
+  commercialItems.forEach(x=>{
     const cls=x.status==="Found in quotation"?"found":x.status==="Not clearly found"?"missing":"attention";
     const status=x.status==="Could not read"?"Could not read":dt(x.status);
     const g=x.guidance||{};
@@ -741,8 +755,12 @@ function renderReport(r,scroll=true){
     ct.innerHTML+='<tr><td>'+escapeHtml(dt(x.label))+'</td><td><span class="status '+cls+'">'+escapeHtml(status)+'</span></td><td>'+escapeHtml(x.note||"")+evidence+'</td><td><span class="tableAction">'+escapeHtml(action)+'</span></td></tr>';
   });
 
-  const q=document.getElementById("questions");q.innerHTML="";
-  (r.questions||[]).forEach((x,i)=>q.innerHTML+='<div class="questionCard"><div class="questionNo">'+String(i+1).padStart(2,"0")+'</div><div class="questionText">'+escapeHtml(x)+'</div></div>');
+  const q=document.getElementById("questions"), extraQ=document.getElementById("extraQuestions");q.innerHTML="";extraQ.innerHTML="";
+  const allQuestions=r.questions||[];
+  allQuestions.slice(0,3).forEach((x,i)=>q.innerHTML+='<div class="questionCard"><div class="questionNo">'+String(i+1).padStart(2,"0")+'</div><div class="questionText">'+escapeHtml(x)+'</div></div>');
+  allQuestions.slice(3).forEach((x,i)=>extraQ.innerHTML+='<div class="questionCard"><div class="questionNo">'+String(i+4).padStart(2,"0")+'</div><div class="questionText">'+escapeHtml(x)+'</div></div>');
+  document.getElementById("moreQuestions").style.display=allQuestions.length>3?"block":"none";
+  document.getElementById("moreQuestionsLabel").textContent=t("moreQuestions")+" ("+Math.max(0,allQuestions.length-3)+")";
 
   document.getElementById("report").style.display="block";
   if(scroll)document.getElementById("report").scrollIntoView({behavior:"smooth"});
