@@ -255,9 +255,48 @@ def build_report(pages):
         'extracted_text': text[:30000],
     }
 
+PROJECTS = {
+    'solar': {
+        'name': 'Solar Power Projects',
+        'short': 'Solar',
+        'description': 'Understand utility-scale, rooftop, floating and hybrid solar projects before comparing an EPC quotation.',
+        'stats': [
+            ('India solar capacity', '174.55 GW', 'MNRE cumulative installed capacity as on 31 Oct 2026'),
+            ('Ground-mounted solar', '127.33 GW', 'MNRE cumulative installed capacity'),
+            ('Rooftop solar', '34.97 GW', 'MNRE cumulative installed capacity'),
+        ],
+        'systems': ['PV modules', 'Inverters', 'Module mounting structures', 'DC/AC cabling', 'Transformers & switchgear', 'SCADA / monitoring', 'Civil works', 'Grid evacuation'],
+        'checklist': ['Module make, model, wattage and warranty', 'Inverter make/model and capacity', 'Guaranteed generation and performance assumptions', 'Civil, evacuation and approval scope', 'Payment milestones tied to measurable deliverables', 'O&M, warranty and exclusions'],
+        'projects': [
+            ('Nokh Solar Project', 'Rajasthan', '735 MW', 'Operational', 'NTPC published commissioned-project information'),
+            ('Bhadla-II Solar Project', 'Rajasthan', '500 MW', 'Operational', 'NTPC published operational-project information'),
+            ('Ramagundam Solar 3', 'Telangana', '176 MW', 'Operational', 'NTPC published commissioned-project information'),
+            ('Kalasar Solar Energy Project', 'Bikaner, Rajasthan', '650 MW solar component', 'Commercial operation in phases during 2026', 'NTPC corporate announcements'),
+            ('Bikaner I', 'Rajasthan', '300 MW', 'Under construction', 'NTPC future-capacity additions'),
+            ('Barethi', 'Madhya Pradesh', '630 MW', 'Under construction', 'NTPC future-capacity additions'),
+        ]
+    },
+    'cbg': {'name':'CBG / Biogas Projects','short':'CBG / Biogas','description':'Understand feedstock, digestion, gas upgrading, compression, utilities and output assumptions.','stats': [('Project lens','Feedstock → biogas → purification → CBG','Understand the process chain'),('Key commercial point','Output depends on feedstock','Check quantity, quality and operating assumptions'),('What to verify','Guaranteed production','Match assumptions to contract')],'systems':['Feedstock handling','Anaerobic digestion','Biogas cleaning','CO₂ / H₂S removal','Compression','Storage / dispensing','Digestate handling','Utilities & safety'],'checklist':['Feedstock quantity and quality assumptions','Guaranteed CBG output and uptime','Gas purification specification','Compression and storage scope','Digestate handling','Performance test and remedy terms'],'projects':[]},
+    'water': {'name':'STP / ETP / WTP Projects','short':'STP / ETP / WTP','description':'Understand treatment capacity, process stages, utilities, sludge handling, treated-water quality and performance guarantees.','stats':[('Capacity lens','MLD','Match plant capacity to inlet load'),('Core question','What outlet quality is guaranteed?','Check test parameters and acceptance criteria'),('Scope','Civil + mechanical + electrical + instrumentation','Confirm every interface')],'systems':['Inlet works','Primary treatment','Biological treatment','Tertiary treatment','Filtration / disinfection','Sludge handling','Electrical & instrumentation','Reuse / discharge system'],'checklist':['Inlet and outlet parameters','Process technology and equipment sizing','Civil and electrical scope','Sludge handling','Performance guarantee','Commissioning and testing protocol'],'projects':[]},
+    'bess': {'name':'BESS / Hybrid Projects','short':'BESS / Hybrid','description':'Understand storage capacity, power rating, duration, controls, grid connection and solar-wind integration.','stats':[('Storage lens','MW / MWh','Power and energy are different'),('Core question','What duration is guaranteed?','Check usable energy and degradation'),('Grid interface','PCS + transformer + protection','Confirm evacuation and interconnection scope')],'systems':['Battery containers','Battery management system','PCS / inverters','EMS / controls','HVAC & fire safety','Transformers','Protection & switchgear','Grid interconnection'],'checklist':['MW and MWh rating','Usable energy and degradation assumptions','Round-trip efficiency','Fire and safety systems','Warranty and augmentation','Grid and commissioning scope'],'projects':[]},
+    'pyrolysis': {'name':'Pyrolysis Projects','short':'Pyrolysis','description':'Understand feedstock, reactor technology, product yields, utilities, emissions control and operating assumptions.','stats':[('Throughput lens','TPD','Match feedstock specification to capacity'),('Core question','What product yield is guaranteed?','Check operating conditions'),('Scope','Process + utilities + emission control','Confirm complete battery limits')],'systems':['Feedstock preparation','Reactor system','Condensation / product recovery','Gas handling','Emission control','Utilities','Storage','Safety systems'],'checklist':['Feedstock specification','Throughput and yield assumptions','Energy consumption','Emission-control scope','Product quality specification','Reference-plant evidence'],'projects':[]},
+    'industrial': {'name':'Industrial EPC Projects','short':'Industrial EPC','description':'Understand process plants, machinery, utilities, civil works, electrical systems and interfaces before evaluating an EPC proposal.','stats':[('Project lens','Process + utilities + infrastructure','Define battery limits'),('Commercial focus','BOQ + milestones + exclusions','Reconcile the full scope'),('Decision point','Performance and acceptance','Make commitments measurable')],'systems':['Process equipment','Piping','Civil & structural','Electrical','Instrumentation','Utilities','Material handling','Commissioning'],'checklist':['Process design basis','Equipment specifications','Battery limits and interfaces','BOQ and exclusions','Performance guarantees','Commissioning and acceptance'],'projects':[]}
+}
+
 @app.get('/')
 def home():
     return render_template('index.html')
+
+@app.get('/projects')
+def projects():
+    return render_template('projects.html', projects=PROJECTS)
+
+@app.get('/projects/<slug>')
+def project_detail(slug):
+    project = PROJECTS.get(slug)
+    if not project:
+        return render_template('projects.html', projects=PROJECTS), 404
+    return render_template('project.html', project=project, slug=slug)
 
 def run_analysis(job_id, file_bytes):
     try:
