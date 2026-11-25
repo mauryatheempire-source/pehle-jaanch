@@ -11,6 +11,43 @@
 .hero{background:linear-gradient(115deg,#fff 0%,#f7fbff 100%);padding:62px 0 64px;min-height:680px}.grid{display:grid;grid-template-columns:1.08fr .92fr;gap:62px;align-items:center}.eyebrow{display:inline-block;color:#0759c9;background:#edf4ff;border-radius:30px;padding:12px 16px;font-size:15px;font-weight:900;letter-spacing:.4px}.hero h1{font-size:clamp(38px,3.6vw,60px);line-height:1.1;letter-spacing:-2px;margin:24px 0 21px;font-weight:850}.hero h1 span{color:var(--blue)}.intro{font-size:20px;line-height:1.62;color:#64748b;margin:0;max-width:760px}.intro strong{color:#14243a}.benefits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:29px 0;align-items:stretch}.benefit{background:#fff;border:1px solid var(--line);border-radius:17px;padding:15px 14px;min-height:112px;height:100%;font-size:14px;line-height:1.5;color:#718096}.benefit b{display:block;color:#14243a;font-size:15px;margin-bottom:7px}.cta{display:inline-flex;align-items:center;gap:10px;background:var(--blue);color:#fff;text-decoration:none;border:0;border-radius:12px;padding:15px 21px;font-size:18px;font-weight:850;box-shadow:0 8px 18px #1769e826;cursor:pointer}.uploadhint{font-size:13px;color:#718096;margin:10px 0 0}.flowcard{background:#fff;border:1px solid #dce5ee;border-radius:24px;padding:26px 25px;box-shadow:0 20px 50px rgba(27,56,86,.07)}.flowtitle{font-size:14px;color:#0759c9;font-weight:900;letter-spacing:.5px;margin:0 0 19px}.flowsteps{display:grid;grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr) 24px minmax(0,1fr);gap:8px;align-items:stretch}.step{border:1px solid #dce5ee;border-radius:16px;padding:17px 14px;min-height:205px;height:100%;display:flex;flex-direction:column;justify-content:flex-start}.stepicon{font-size:28px;line-height:1.2;margin-bottom:12px}.step b{font-size:15px;line-height:1.35;margin-bottom:5px}.step span:last-child{font-size:13px;line-height:1.65;color:#718096}.arrow{font-size:22px;color:var(--blue);text-align:center;align-self:center}
 .uploadarea{margin-top:28px}.fileinput{display:none}.report{display:none;padding:55px 0 75px;background:#f7f9fc}.reporthead,.card,.metric{background:#fff;border:1px solid var(--line);border-radius:18px}.reporthead{padding:25px}.reporthead h2{margin:0;color:var(--navy)}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}.metric{padding:18px}.metric strong{font-size:28px;display:block}.metric span{font-size:13px;color:var(--muted)}.card{padding:22px;margin-top:15px}.finding{display:grid;grid-template-columns:170px 150px 1fr 55px;gap:12px;padding:15px 0;border-bottom:1px solid var(--line);align-items:start}.overviewBars{display:grid;gap:14px;margin:20px 0}.barrow{display:grid;grid-template-columns:170px 1fr 35px;gap:12px;align-items:center;font-size:13px}.track{height:12px;border-radius:20px;background:#edf1f5;overflow:hidden}.fill{height:100%;border-radius:20px}.fill.mentioned{background:#23845f}.fill.clarify{background:#e4a52b}.fill.absent{background:#bd6b6b}.overviewLegend{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:12px}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}.dot.mentioned{background:#23845f}.dot.clarify{background:#e4a52b}.dot.absent{background:#bd6b6b}.finding{grid-template-columns:minmax(145px,190px) minmax(130px,165px) minmax(0,1fr) 48px}.status{display:inline-block;border-radius:20px;padding:5px 9px;background:#f2f5f8;white-space:normal}.status.found{background:#eaf6f0}.status.attention{background:#fff5df}.status.missing{background:#fff0f0}.commercial-item{padding:14px 0;border-bottom:1px solid var(--line)}.commercial-item:last-child{border:0}.commercial-top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:5px}.commercial-item p{margin:5px 0;color:#53657a;line-height:1.5;font-size:14px}.finding:last-child{border:0}.status{font-weight:800;font-size:12px}.found{color:#16845b}.attention{color:#b27700}.missing{color:#a84a4a}.page{font-size:12px;color:var(--muted);text-align:right}.evidence{grid-column:3/5;margin-top:-5px;padding:9px 11px;background:#f7f9fc;border-left:3px solid #9bb8df;border-radius:0 8px 8px 0;color:#52647a;font-size:12px;line-height:1.5}.evidence b{color:#33465d}.questions li{margin:12px 0;line-height:1.5}.notice{background:#fff8df;border:1px solid #f1df9b;border-radius:14px;padding:15px;font-size:13px;line-height:1.5;color:#6b5710}.error{display:none;color:#9b2c2c;background:#fff0f0;border:1px solid #edc4c4;padding:13px;border-radius:12px;margin-top:13px}.loading{display:none;color:var(--blue);font-weight:700;margin-top:12px}.footer{padding:30px 0;background:#101f32;color:#dce8f5;font-size:14px}.footer b{color:#fff}
 
+
+/* Effective result dashboard */
+.resultSummary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:18px 0}
+.resultCard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px 19px;box-shadow:0 5px 18px rgba(20,45,75,.035)}
+.resultCard .rcTop{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.resultCard .rcIcon{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:17px;background:#f2f5f8}
+.resultCard .rcNumber{font-size:31px;font-weight:900;letter-spacing:-.7px}
+.resultCard .rcLabel{font-size:12px;color:var(--muted);font-weight:750;line-height:1.4}
+.resultCard.found .rcIcon{background:#eaf6f0}.resultCard.attention .rcIcon{background:#fff5df}.resultCard.missing .rcIcon{background:#fff0f0}.resultCard.questions .rcIcon{background:#edf4ff}
+.resultTableWrap,.commercialTableWrap{overflow-x:auto;border:1px solid #e1e8f0;border-radius:14px}
+.resultTable{width:100%;border-collapse:collapse;min-width:720px;background:#fff}
+.resultTable th{text-align:left;padding:13px 14px;background:#f7f9fc;color:#53657a;font-size:11px;text-transform:uppercase;letter-spacing:.4px}
+.resultTable td{padding:15px 14px;border-top:1px solid #e7edf3;vertical-align:top;font-size:13px;line-height:1.55;color:#53657a}
+.resultTable td:first-child{font-weight:850;color:var(--navy);width:18%}
+.resultTable td:nth-child(2){width:15%;white-space:nowrap}
+.resultTable td:last-child{width:25%}
+.resultTable .status{font-size:11px}
+.tableNote{font-size:12px;color:var(--muted);margin-top:7px}
+.tableAction{font-weight:750;color:#24558f}
+.tableEvidence{margin-top:9px;padding:8px 10px;background:#f7f9fc;border-left:3px solid #9bb8df;border-radius:0 7px 7px 0;font-size:11px;color:#5b6d82}
+.miniGuidance{margin-top:9px}
+.miniGuidance details{border:1px solid #e4ebf3;border-radius:9px;background:#fbfcfe}
+.miniGuidance summary{cursor:pointer;padding:8px 10px;font-size:11px;font-weight:800;color:#24558f}
+.miniGuidance .mgBody{padding:0 10px 10px;font-size:11px;color:#596b80;line-height:1.5}
+.figureGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:15px 0}
+.figureItem{border:1px solid #e1e8f0;border-radius:13px;padding:14px;background:#fbfcfe}
+.figureItem .figureLabel{font-size:11px;color:var(--muted);margin-bottom:5px}
+.figureItem .figureValue{font-size:19px;font-weight:900;color:var(--navy);word-break:break-word}
+.arithmetic{font-size:13px;color:#53657a;margin:14px 0 0}
+.questionGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.questionCard{display:flex;gap:12px;align-items:flex-start;border:1px solid #e1e8f0;border-radius:14px;padding:15px;background:#fbfcfe}
+.questionNo{min-width:31px;height:31px;border-radius:9px;background:#edf4ff;color:#1769e8;display:grid;place-items:center;font-size:11px;font-weight:900}
+.questionText{font-size:13px;line-height:1.55;color:#334b67;font-weight:700}
+.sectionTitle{display:flex;justify-content:space-between;align-items:flex-start;gap:15px}
+@media(max-width:900px){.resultSummary{grid-template-columns:repeat(2,minmax(0,1fr))}.figureGrid{grid-template-columns:1fr 1fr}.questionGrid{grid-template-columns:1fr}}
+@media(max-width:520px){.resultSummary{grid-template-columns:1fr 1fr;gap:8px}.resultCard{padding:13px}.resultCard .rcNumber{font-size:25px}.figureGrid{grid-template-columns:1fr}.questionGrid{grid-template-columns:1fr}.resultTable{min-width:650px}}
+
 /* Report experience refresh */
 .report{scroll-margin-top:18px}
 .report .reporthead{position:relative;padding:28px 30px;background:linear-gradient(135deg,#fff 0%,#f4f8ff 100%)}
@@ -82,7 +119,48 @@
 <div class="step"><div class="stepicon">✓</div><b>Better discussion</b><span>Ask better questions before deciding</span></div>
 </div></div>
 </div></section>
-<section class="report" id="report"><div class="container"><div class="reporthead"><div class="eyebrow" id="reportEyebrow">PRELIMINARY JAANCH</div><h2 id="rtitle">Your Jaanch Report</h2><p id="rsummary"></p></div><div class="metrics"><div class="metric"><strong id="mfound">0</strong><span>Areas with information found</span></div><div class="metric"><strong id="mattention">0</strong><span>Areas needing attention</span></div><div class="metric"><strong id="mquestions">0</strong><span>Questions to discuss</span></div></div><nav class="report-nav" aria-label="Report sections"><a href="#overview">At a glance</a><a href="#findingsCard">Key findings</a><a href="#commercialFigures">Figures</a><a href="#commercialCard">Commercial checks</a><a href="#questionsCard">Questions</a></nav><div class="card overview" id="overview"><h3>Your quotation at a glance</h3><p class="uploadhint">A quick guide to what the document mentions. This is not a quality score or approval recommendation.</p><div id="overviewBars"></div><div class="overviewLegend"><span><i class="dot mentioned"></i> Mentioned</span><span><i class="dot clarify"></i> Needs a closer look</span><span><i class="dot absent"></i> Not clearly found</span></div></div><div class="card" id="findingsCard"><h3>Understand each finding</h3><p class="uploadhint">Open each item to see what the quotation says and which page to check.</p><div id="findings"></div></div><div class="card" id="commercialFigures"><h3>Commercial figures found</h3><p id="amounts"></p><p><b>Arithmetic note:</b> <span id="arithmetic"></span></p></div><div class="card" id="commercialCard"><h3>Commercial checks</h3><p class="uploadhint">These are document checks, not independent verification or a final cost audit.</p><div id="commercialChecks"></div></div><div class="card" id="questionsCard"><h3>Questions to discuss with the EPC provider</h3><ol class="questions" id="questions"></ol></div><div class="card"><div class="notice"><b>Important:</b> Pehle Jaanch kisi company ko “genuine” ya “scam” declare nahi karta. Yeh uploaded proposal ke text ko review karke areas for clarification aur independent verification ko highlight karta hai. Final engineering, legal, financial and commercial decisions should be independently verified.</div></div></div></section>
+<section class="report" id="report"><div class="container">
+<div class="reporthead">
+  <div class="eyebrow" id="reportEyebrow">PRELIMINARY JAANCH</div>
+  <h2 id="rtitle">Your Jaanch Report</h2>
+  <p id="rsummary"></p>
+</div>
+
+<div class="resultSummary" id="resultSummary"></div>
+
+<nav class="report-nav" aria-label="Report sections">
+  <a href="#overview">At a glance</a><a href="#findingsCard">Key findings</a><a href="#commercialFigures">Figures</a><a href="#commercialCard">Commercial checks</a><a href="#questionsCard">Questions</a>
+</nav>
+
+<div class="card overview" id="overview">
+  <div class="sectionTitle"><div><h3>Your quotation at a glance</h3><p class="uploadhint">A quick guide to what the document mentions. This is not a quality score or approval recommendation.</p></div></div>
+  <div id="overviewBars"></div>
+  <div class="overviewLegend"><span><i class="dot mentioned"></i> Mentioned</span><span><i class="dot clarify"></i> Needs a closer look</span><span><i class="dot absent"></i> Not clearly found</span></div>
+</div>
+
+<div class="card" id="findingsCard">
+  <div class="sectionTitle"><div><h3>Key findings</h3><p class="uploadhint">A simple view of what is mentioned, what needs attention, and what is not clearly found.</p></div></div>
+  <div class="resultTableWrap"><table class="resultTable"><thead><tr><th>Check</th><th>Status</th><th>What we found</th><th>Next step</th></tr></thead><tbody id="findingsTable"></tbody></table></div>
+</div>
+
+<div class="card" id="commercialFigures">
+  <div class="sectionTitle"><div><h3>Commercial figures found</h3><p class="uploadhint">Numbers extracted from the quotation for quick review.</p></div></div>
+  <div class="figureGrid" id="figureGrid"></div>
+  <p class="arithmetic"><b>Arithmetic note:</b> <span id="arithmetic"></span></p>
+</div>
+
+<div class="card" id="commercialCard">
+  <div class="sectionTitle"><div><h3>Commercial checks</h3><p class="uploadhint">Document checks — not independent verification or a final cost audit.</p></div></div>
+  <div class="commercialTableWrap"><table class="resultTable commercialTable"><thead><tr><th>Check</th><th>Status</th><th>What the quotation indicates</th><th>Action</th></tr></thead><tbody id="commercialTable"></tbody></table></div>
+</div>
+
+<div class="card" id="questionsCard">
+  <div class="sectionTitle"><div><h3>Questions to discuss with the EPC provider</h3><p class="uploadhint">Use these questions in your next discussion before finalising the proposal.</p></div></div>
+  <div class="questionGrid" id="questions"></div>
+</div>
+
+<div class="card"><div class="notice"><b>Important:</b> Pehle Jaanch kisi company ko “genuine” ya “scam” declare nahi karta. Yeh uploaded proposal ke text ko review karke areas for clarification aur independent verification ko highlight karta hai. Final engineering, legal, financial and commercial decisions should be independently verified.</div></div>
+</div></section>
 </main>
 <footer class="footer"><div class="container"><b>Pehle Jaanch. Phir Faisla.</b><br>Understand the proposal before you commit.</div></footer>
 <script>
@@ -210,13 +288,22 @@ function renderReport(r,scroll=true){
   window.lastReport=r;
   document.getElementById("rtitle").textContent=t("reportTitle")+" — "+r.project;
   document.getElementById("rsummary").textContent=r.summary||"";
-  document.getElementById("mfound").textContent=r.metrics.found;
-  document.getElementById("mattention").textContent=r.metrics.attention;
-  document.getElementById("mquestions").textContent=r.metrics.questions;
   document.getElementById("arithmetic").textContent=r.arithmetic||"";
-  document.getElementById("amounts").textContent=r.amounts&&r.amounts.length?r.amounts.join(" · "):t("noFigures");
 
   const items=r.findings||[];
+  const found=items.filter(x=>x.status==="Information found").length;
+  const attention=items.filter(x=>x.status==="Needs clarification").length;
+  const missing=items.filter(x=>x.status==="Information not found").length;
+  const qCount=(r.questions||[]).length;
+
+  const cards=[
+    {cls:"found",icon:"✓",num:found,label:t("found")},
+    {cls:"attention",icon:"!",num:attention,label:t("clarifyStatus")},
+    {cls:"missing",icon:"?",num:missing,label:t("missingStatus")},
+    {cls:"questions",icon:"Q",num:qCount,label:t("questionsTitle")}
+  ];
+  document.getElementById("resultSummary").innerHTML=cards.map(x=>'<div class="resultCard '+x.cls+'"><div class="rcTop"><span class="rcIcon">'+x.icon+'</span><span class="rcNumber">'+x.num+'</span></div><div class="rcLabel">'+escapeHtml(x.label)+'</div></div>').join("");
+
   const groups=[
     {key:"mentioned",title:t("mentioned"),items:items.filter(x=>x.status==="Information found")},
     {key:"clarify",title:t("closer"),items:items.filter(x=>x.status==="Needs clarification")},
@@ -225,33 +312,36 @@ function renderReport(r,scroll=true){
   const total=Math.max(items.length,1);
   document.getElementById("overviewBars").innerHTML=groups.map(g=>'<div class="barrow"><b>'+escapeHtml(g.title)+'</b><div class="track"><div class="fill '+g.key+'" style="width:'+(g.items.length/total*100)+'%"></div></div><b>'+g.items.length+"</b></div>").join("");
 
-  const f=document.getElementById("findings");f.innerHTML="";
-  groups.forEach(g=>{
-    if(!g.items.length)return;
-    f.innerHTML+='<h4 style="margin:18px 0 4px">'+escapeHtml(g.title)+"</h4>";
-    g.items.forEach(x=>{
-      const cls=g.key==="mentioned"?"found":g.key==="clarify"?"attention":"missing";
-      const status=x.status==="Information found"?t("found"):x.status==="Needs clarification"?t("clarifyStatus"):t("missingStatus");
-      const ev=x.evidence?'<div class="evidence"><b>'+escapeHtml(t("excerpt"))+" "+escapeHtml(x.page)+'</b><br>“'+escapeHtml(x.evidence)+"”</div>":"";
-      const page=x.page?'<div class="page">'+escapeHtml(t("foundPage"))+" "+escapeHtml(x.page)+"</div>":"";
-      f.innerHTML+='<article class="finding"><div class="finding-head"><b>'+escapeHtml(dt(x.label))+'</b><span class="status '+cls+'">'+escapeHtml(status)+'</span></div><p class="finding-note">'+escapeHtml(x.note||"")+"</p>"+page+ev+guidanceDetails(x)+"</article>";
-    });
+  const table=document.getElementById("findingsTable"); table.innerHTML="";
+  items.forEach(x=>{
+    const cls=x.status==="Information found"?"found":x.status==="Needs clarification"?"attention":"missing";
+    const status=x.status==="Information found"?t("found"):x.status==="Needs clarification"?t("clarifyStatus"):t("missingStatus");
+    const g=x.guidance||{};
+    const evidence=x.evidence?'<div class="tableEvidence"><b>'+escapeHtml(t("excerpt"))+" "+escapeHtml(x.page||"")+'</b><br>“'+escapeHtml(x.evidence)+'”</div>':"";
+    const guidance='<div class="miniGuidance"><details><summary>'+escapeHtml(t("guidance"))+'</summary><div class="mgBody"><b>'+escapeHtml(t("why"))+':</b> '+escapeHtml(g.why_it_matters||"")+"<br><b>"+escapeHtml(t("ask"))+':</b> '+escapeHtml(g.ask_epc||"")+"<br><b>"+escapeHtml(t("verify"))+':</b> '+escapeHtml(g.verify_before_signing||"")+"</div></details></div>";
+    table.innerHTML+='<tr><td>'+escapeHtml(dt(x.label))+'</td><td><span class="status '+cls+'">'+escapeHtml(status)+'</span></td><td>'+escapeHtml(x.note||"")+evidence+'</td><td><span class="tableAction">'+escapeHtml(g.ask_epc||g.verify_before_signing||x.note||"")+'</span>'+guidance+'</td></tr>';
   });
 
-  const cc=document.getElementById("commercialChecks");cc.innerHTML="";
+  const amounts=r.amounts||[];
+  const fg=document.getElementById("figureGrid");
+  fg.innerHTML=amounts.length?amounts.map((a,i)=>'<div class="figureItem"><div class="figureLabel">Figure '+(i+1)+'</div><div class="figureValue">'+escapeHtml(a)+'</div></div>').join(""):'<div class="figureItem"><div class="figureLabel">Commercial figures</div><div class="figureValue">'+escapeHtml(t("noFigures"))+'</div></div>';
+
+  const ct=document.getElementById("commercialTable"); ct.innerHTML="";
   (r.commercial_checks||[]).forEach(x=>{
     const cls=x.status==="Found in quotation"?"found":x.status==="Not clearly found"?"missing":"attention";
     const status=dt(x.status);
-    const ev=x.evidence?'<div class="evidence"><b>'+escapeHtml(t("excerpt"))+" "+escapeHtml(x.page)+'</b><br>“'+escapeHtml(x.evidence)+"”</div>":"";
-    cc.innerHTML+='<article class="commercial-item"><div class="commercial-top"><b>'+escapeHtml(dt(x.label))+'</b><span class="status '+cls+'">'+escapeHtml(status)+'</span></div><p>'+escapeHtml(x.note||"")+"</p>"+ev+guidanceDetails(x)+"</article>";
+    const g=x.guidance||{};
+    const evidence=x.evidence?'<div class="tableEvidence"><b>'+escapeHtml(t("excerpt"))+" "+escapeHtml(x.page||"")+'</b><br>“'+escapeHtml(x.evidence)+'”</div>':"";
+    const action=g.ask_epc||g.verify_before_signing||x.note||"";
+    ct.innerHTML+='<tr><td>'+escapeHtml(dt(x.label))+'</td><td><span class="status '+cls+'">'+escapeHtml(status)+'</span></td><td>'+escapeHtml(x.note||"")+evidence+'</td><td><span class="tableAction">'+escapeHtml(action)+'</span></td></tr>';
   });
 
   const q=document.getElementById("questions");q.innerHTML="";
-  (r.questions||[]).forEach(x=>q.innerHTML+="<li>"+escapeHtml(x)+"</li>");
+  (r.questions||[]).forEach((x,i)=>q.innerHTML+='<div class="questionCard"><div class="questionNo">'+String(i+1).padStart(2,"0")+'</div><div class="questionText">'+escapeHtml(x)+'</div></div>');
+
   document.getElementById("report").style.display="block";
   if(scroll)document.getElementById("report").scrollIntoView({behavior:"smooth"});
 }
-
 const form=document.getElementById("form"),file=document.getElementById("quotation"),btn=document.getElementById("choose"),loading=document.getElementById("loading"),error=document.getElementById("error");
 btn.addEventListener("click",()=>file.click());
 file.addEventListener("change",()=>{if(file.files.length)form.requestSubmit()});
