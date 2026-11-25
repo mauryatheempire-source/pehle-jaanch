@@ -389,6 +389,26 @@
   .howItWorks .howStep p,.trustSection .trustCard p{font-size:14px;line-height:1.55}
 }
 </style>
+<style>
+@media (prefers-reduced-motion:no-preference){
+.reveal{opacity:0;transform:translateY(14px);animation:pjReveal .55s ease forwards}
+.projectCard:nth-child(2){animation-delay:.06s}.projectCard:nth-child(3){animation-delay:.12s}
+.projectCard:nth-child(4){animation-delay:.18s}.projectCard:nth-child(5){animation-delay:.24s}.projectCard:nth-child(6){animation-delay:.30s}
+.projectCard:hover .projectVisual{transform:scale(1.04)}.projectCard:hover .projectArrow{transform:translateX(4px)}
+}
+@keyframes pjReveal{to{opacity:1;transform:none}}
+.projectVisual{position:absolute;right:12px;top:12px;width:76px;height:50px;border-radius:12px;background:#edf4ff;transition:transform .2s ease}
+.solarVisual{background:linear-gradient(160deg,#eaf4ff 0 48%,#b9d4f5 49% 58%,#fff 59%)}
+.solarVisual:before{content:"";position:absolute;width:42px;height:17px;left:8px;bottom:8px;background:#1769e8;transform:skew(-18deg);box-shadow:0 5px 0 #7892ae}
+.solarVisual:after{content:"";position:absolute;width:9px;height:9px;right:9px;top:8px;border-radius:50%;background:#f1b83b;box-shadow:0 0 0 5px #f8e7b8}
+.cbgVisual{background:linear-gradient(135deg,#eef8f3,#d5e9df)}.cbgVisual:before{content:"";position:absolute;width:29px;height:29px;left:9px;bottom:8px;border:5px solid #9fc9b6;border-radius:50%;background:#fff}.cbgVisual:after{content:"";position:absolute;width:28px;height:5px;right:7px;bottom:15px;border-radius:4px;background:#1769e8}
+.waterVisual{background:linear-gradient(180deg,#eef8ff,#cfeafa)}.waterVisual:before{content:"";position:absolute;width:56px;height:13px;left:9px;bottom:9px;border-radius:50%;background:#8bc7ec;box-shadow:0 -7px 0 -2px #fff}.waterVisual:after{content:"";position:absolute;width:4px;height:25px;left:35px;top:7px;border-radius:4px;background:#1769e8}
+.bessVisual{background:linear-gradient(135deg,#f4f7fa,#e4edf6)}.bessVisual:before{content:"";position:absolute;width:21px;height:30px;left:12px;bottom:8px;border:4px solid #7892ae;border-radius:4px;background:#fff}.bessVisual:after{content:"";position:absolute;width:30px;height:4px;right:8px;bottom:16px;border-radius:4px;background:#1769e8}
+.pyroVisual{background:linear-gradient(145deg,#f6f2ec,#f1dfc9)}.pyroVisual:before{content:"";position:absolute;width:25px;height:29px;left:12px;bottom:8px;border-radius:5px 5px 9px 9px;background:#7892ae}.pyroVisual:after{content:"";position:absolute;width:9px;height:14px;left:38px;top:8px;border-radius:50%;background:#f1b83b;box-shadow:8px 5px 0 -2px #e98b3b}
+.industrialVisual{background:linear-gradient(160deg,#f2f5f8,#dce5ee)}.industrialVisual:before{content:"";position:absolute;width:12px;height:28px;left:10px;bottom:8px;background:#7892ae;box-shadow:16px 5px 0 #9db0c5,32px -3px 0 #c1cfdd}.industrialVisual:after{content:"";position:absolute;width:48px;height:4px;left:8px;bottom:7px;border-radius:4px;background:#1769e8}
+.projectCard>div:not(.projectVisual){position:relative;z-index:1;padding-right:50px}
+@media(max-width:600px){.projectVisual{width:64px;height:44px}.projectCard>div:not(.projectVisual){padding-right:38px}}
+</style>
 </head>
 <body>
 <header class="nav"><div class="container navinner"><a class="brand" href="/" aria-label="Pehle Jaanch home">Pehle <span>Jaanch</span></a><div style="display:flex;align-items:center;gap:18px"><nav class="siteNav"><a href="/gate">Free Pehle Jaanch</a><a href="#projects">Projects</a><a href="#howItWorks">How it works</a><a href="#trust">Trust & privacy</a><a href="#report">Check quotation</a></nav><label class="langWrap"><span id="navLanguage">Language</span><select id="languageSelect" aria-label="Choose language"><option value="en">English</option><option value="hi">हिन्दी</option><option value="mr">मराठी</option></select></label></div></div></header>
@@ -419,12 +439,12 @@
       <p>Learn what a plant involves, its major systems, infrastructure, commercial heads and the questions worth asking.</p>
     </div>
     <div class="projectGrid">
-      <a class="projectCard" href="/projects/solar"><span class="projectIcon">☀</span><div><b>Solar</b><p>Utility-scale, rooftop, floating, hybrid & storage</p></div><span class="projectArrow">→</span></a>
-      <a class="projectCard" href="/projects/cbg"><span class="projectIcon">♻</span><div><b>CBG / Biogas</b><p>Feedstock, digestion, gas upgrading & compression</p></div><span class="projectArrow">→</span></a>
-      <a class="projectCard" href="/projects/water"><span class="projectIcon">💧</span><div><b>STP / ETP / WTP</b><p>Capacity, treatment process, reuse & utilities</p></div><span class="projectArrow">→</span></a>
-      <a class="projectCard" href="/projects/bess"><span class="projectIcon">⚡</span><div><b>BESS / Hybrid</b><p>Storage, solar-wind integration & evacuation</p></div><span class="projectArrow">→</span></a>
-      <a class="projectCard" href="/projects/pyrolysis"><span class="projectIcon">🔥</span><div><b>Pyrolysis</b><p>Feedstock, reactor, products, utilities & emissions</p></div><span class="projectArrow">→</span></a>
-      <a class="projectCard" href="/projects/industrial"><span class="projectIcon">🏭</span><div><b>Industrial EPC</b><p>Process plants, utilities, machinery & infrastructure</p></div><span class="projectArrow">→</span></a>
+      <a class="projectCard reveal" href="/projects/solar"><div class="projectVisual solarVisual" aria-hidden="true"></div><span class="projectIcon">☀</span><div><b>Solar</b><p>Utility-scale, rooftop, floating, hybrid & storage</p></div><span class="projectArrow">→</span></a>
+      <a class="projectCard reveal" href="/projects/cbg"><div class="projectVisual cbgVisual" aria-hidden="true"></div><span class="projectIcon">♻</span><div><b>CBG / Biogas</b><p>Feedstock, digestion, gas upgrading & compression</p></div><span class="projectArrow">→</span></a>
+      <a class="projectCard reveal" href="/projects/water"><div class="projectVisual waterVisual" aria-hidden="true"></div><span class="projectIcon">💧</span><div><b>STP / ETP / WTP</b><p>Capacity, treatment process, reuse & utilities</p></div><span class="projectArrow">→</span></a>
+      <a class="projectCard reveal" href="/projects/bess"><div class="projectVisual bessVisual" aria-hidden="true"></div><span class="projectIcon">⚡</span><div><b>BESS / Hybrid</b><p>Storage, solar-wind integration & evacuation</p></div><span class="projectArrow">→</span></a>
+      <a class="projectCard reveal" href="/projects/pyrolysis"><div class="projectVisual pyroVisual" aria-hidden="true"></div><span class="projectIcon">🔥</span><div><b>Pyrolysis</b><p>Feedstock, reactor, products, utilities & emissions</p></div><span class="projectArrow">→</span></a>
+      <a class="projectCard reveal" href="/projects/industrial"><div class="projectVisual industrialVisual" aria-hidden="true"></div><span class="projectIcon">🏭</span><div><b>Industrial EPC</b><p>Process plants, utilities, machinery & infrastructure</p></div><span class="projectArrow">→</span></a>
     </div>
     <div class="projectMeta">
       <div><b>Project information</b><span>Completed • Ongoing • Tendered • Announced</span></div>
