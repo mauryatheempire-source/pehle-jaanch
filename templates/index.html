@@ -406,9 +406,9 @@ function renderReport(r,scroll=true){
   document.getElementById("arithmetic").textContent=r.arithmetic||"";
 
   const items=r.findings||[];
-  const found=items.filter(x=>x.status==="Information found").length;
+  const found=items.filter(x=>x.status==="Found").length;
   const attention=items.filter(x=>x.status==="Needs clarification").length;
-  const missing=items.filter(x=>x.status==="Information not found").length;
+  const missing=items.filter(x=>x.status==="Not mentioned" || x.status==="Could not read").length;
   const qCount=(r.questions||[]).length;
 
   const cards=[
@@ -420,17 +420,17 @@ function renderReport(r,scroll=true){
   document.getElementById("resultSummary").innerHTML=cards.map(x=>'<div class="resultCard '+x.cls+'"><div class="rcTop"><span class="rcIcon">'+x.icon+'</span><span class="rcNumber">'+x.num+'</span></div><div class="rcLabel">'+escapeHtml(x.label)+'</div></div>').join("");
 
   const groups=[
-    {key:"mentioned",title:t("mentioned"),items:items.filter(x=>x.status==="Information found")},
+    {key:"mentioned",title:t("mentioned"),items:items.filter(x=>x.status==="Found")},
     {key:"clarify",title:t("closer"),items:items.filter(x=>x.status==="Needs clarification")},
-    {key:"absent",title:t("notFound"),items:items.filter(x=>x.status==="Information not found")}
+    {key:"absent",title:t("notFound"),items:items.filter(x=>x.status==="Not mentioned" || x.status==="Could not read")}
   ];
   const total=Math.max(items.length,1);
   document.getElementById("overviewBars").innerHTML=groups.map(g=>'<div class="barrow"><b>'+escapeHtml(g.title)+'</b><div class="track"><div class="fill '+g.key+'" style="width:'+(g.items.length/total*100)+'%"></div></div><b>'+g.items.length+"</b></div>").join("");
 
   const table=document.getElementById("findingsTable"); table.innerHTML="";
   items.forEach(x=>{
-    const cls=x.status==="Information found"?"found":x.status==="Needs clarification"?"attention":"missing";
-    const status=x.status==="Information found"?t("found"):x.status==="Needs clarification"?t("clarifyStatus"):t("missingStatus");
+    const cls=x.status==="Found"?"found":x.status==="Needs clarification"?"attention":"missing";
+    const status=x.status==="Found"?t("found"):x.status==="Needs clarification"?t("clarifyStatus"):x.status==="Could not read"?"Could not read":t("missingStatus");
     const g=x.guidance||{};
     const evidence=x.evidence?'<div class="tableEvidence"><b>'+escapeHtml(t("excerpt"))+" "+escapeHtml(x.page||"")+'</b><br>“'+escapeHtml(x.evidence)+'”</div>':"";
     const guidance='<div class="miniGuidance"><details><summary>'+escapeHtml(t("guidance"))+'</summary><div class="mgBody"><b>'+escapeHtml(t("why"))+':</b> '+escapeHtml(g.why_it_matters||"")+"<br><b>"+escapeHtml(t("ask"))+':</b> '+escapeHtml(g.ask_epc||"")+"<br><b>"+escapeHtml(t("verify"))+':</b> '+escapeHtml(g.verify_before_signing||"")+"</div></details></div>";
@@ -444,7 +444,7 @@ function renderReport(r,scroll=true){
   const ct=document.getElementById("commercialTable"); ct.innerHTML="";
   (r.commercial_checks||[]).forEach(x=>{
     const cls=x.status==="Found in quotation"?"found":x.status==="Not clearly found"?"missing":"attention";
-    const status=dt(x.status);
+    const status=x.status==="Could not read"?"Could not read":dt(x.status);
     const g=x.guidance||{};
     const evidence=x.evidence?'<div class="tableEvidence"><b>'+escapeHtml(t("excerpt"))+" "+escapeHtml(x.page||"")+'</b><br>“'+escapeHtml(x.evidence)+'”</div>':"";
     const action=g.ask_epc||g.verify_before_signing||x.note||"";
