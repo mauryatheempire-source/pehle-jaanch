@@ -126,17 +126,50 @@ def page_for_term(pages, patterns):
             return p['page']
     return None
 
+
+IMPACT_GUIDANCE = {
+    'Scope': ('A scope reference appears, but the exact inclusions and interfaces still need to be matched to the final scope.', 'Which civil, electrical, utility, approval, testing and handover activities are included, and which remain with the client?', 'Signed scope matrix, battery limits, interface list and exclusions schedule.'),
+    'Technical details': ('Technical terms appear, but their presence alone does not confirm that the design is complete or suitable.', 'Can you provide the final capacity, make/model, datasheets, applicable standards and design assumptions?', 'Approved technical datasheets, process/design basis, equipment list and compliance documents.'),
+    'Commercial price': ('A price reference appears. The extracted figures are not a full reconciliation of the quotation.', 'Please share the item-wise price build-up and confirm the complete amount payable, including taxes and optional items.', 'Detailed BOQ, priced schedule, tax calculation and a written list of optional/additional costs.'),
+    'Payment terms': ('Payment wording appears. The amount and timing should be tied to clear, verifiable deliverables.', 'What deliverable and acceptance evidence is linked to each payment, especially the advance?', 'Stage-wise payment schedule, purchase-order terms, delivery evidence and milestone acceptance criteria.'),
+    'Warranty': ('A warranty or guarantee reference appears, but coverage and exclusions may vary by equipment and work type.', 'What is covered, for how long, from which start date, and how quickly will service issues be addressed?', 'Warranty certificates, equipment-wise coverage, exclusions, response-time commitment and service process.'),
+    'Timeline': ('A time-related reference appears, but the project start trigger and completion conditions need to be clear.', 'From which date is the completion period counted, and what events allow an extension?', 'Baseline project schedule, delivery milestones, commissioning criteria and extension provisions.'),
+    'Taxes': ('A tax reference appears, but the extracted text does not establish the final tax treatment or total payable.', 'Is GST included or extra, which rate applies to each supply/service, and what is the tax-inclusive total?', 'Tax breakup, invoice structure and written confirmation of the total landed cost.'),
+    'Exclusions': ('An exclusion or client-responsibility reference appears. Confirm that all interfaces and dependencies are accounted for.', 'Please list every excluded item and identify who will arrange, pay for and complete it.', 'Exclusions schedule, responsibility matrix and interface/utility requirements.'),
+    'Performance / output': ('Performance-related wording appears, but the conditions and method used to measure performance matter.', 'What output is committed, under what feedstock/site/operating conditions, and how will it be tested?', 'Guaranteed-performance schedule, assumptions, test protocol, acceptance criteria and remedy provisions.'),
+    'Item-wise BOQ / price breakup': ('An item-wise breakup reference appears. Check whether quantities, unit rates, specifications and totals are all provided.', 'Can you provide a complete BOQ with quantities, unit rates, makes/specifications and line totals?', 'Priced BOQ, technical specification cross-reference and reconciled grand total.'),
+    'GST treatment': ('A tax reference appears, but it does not by itself confirm whether the quoted total includes all applicable GST.', 'Please confirm the applicable GST rate and taxable value for each major supply/service, and whether it is included or extra.', 'GST breakup, tax invoice assumptions and tax-inclusive total.'),
+    'Freight, installation and other charges': ('Additional-charge wording appears. Confirm the exact boundary between included and separately billed work.', 'Are packing, freight, transit insurance, unloading, erection, installation, testing and commissioning included?', 'Written inclusion list, logistics/installation scope and schedule of extra charges.'),
+    'Payment milestones': ('Payment-related wording appears. Each instalment should correspond to an observable project milestone.', 'What evidence and acceptance sign-off are required before each payment becomes due?', 'Milestone-wise payment table, delivery/inspection records and acceptance procedure.'),
+    'Completion and delay terms': ('Completion or delay wording appears. The contract should define the completion trigger and how delays are treated.', 'What is the committed completion date, what extensions are permitted, and what remedy applies to attributable delay?', 'Project schedule, extension clauses, delay-remedy terms and commissioning/handover definition.'),
+    'Payment percentage cross-check': ('The extracted percentage figures are only a preliminary text check and may include unrelated percentages.', 'Please confirm the complete payment-stage percentages and the amount due at each stage.', 'Original payment table, stage-wise amount calculation and confirmation that all stages reconcile to the contract total.')
+}
+
+def add_impact_guidance(item):
+    why, ask, verify = IMPACT_GUIDANCE.get(item['label'], (
+        'This point can affect project cost, delivery, performance or responsibility if it is not clearly defined.',
+        'Please explain the exact commitment, assumptions and responsibility for this item.',
+        'Written contractual wording and supporting technical/commercial documents.'
+    ))
+    item['guidance'] = {
+        'what_found': item.get('note', 'Review this item in the quotation.'),
+        'why_it_matters': why,
+        'ask_epc': ask,
+        'verify_before_signing': verify
+    }
+    return item
+
 def commercial_review(pages, text):
     checks = []
     def add(label, patterns, good_note, missing_note):
         ev = evidence_for_term(pages, patterns)
-        checks.append({
+        checks.append(add_impact_guidance({
             'label': label,
             'status': 'Found in quotation' if ev else 'Not clearly found',
             'note': good_note if ev else missing_note,
             'page': ev['page'] if ev else None,
             'evidence': ev['text'] if ev else None
-        })
+        }))
 
     add('Item-wise BOQ / price breakup',
         [r'\bBOQ\b', r'bill of quantities', r'price break.?up', r'item.?wise', r'quantity\s+.*\brate\b'],
@@ -167,9 +200,9 @@ def commercial_review(pages, text):
         note = f'Percentage figures appear near payment-related wording and add to {total:g}%. Confirm these are all payment stages and that the schedule totals 100%.'
         if abs(total - 100) > 0.01:
             note += ' The extracted percentage total is not 100%; check the original table carefully.'
-        checks.append({'label':'Payment percentage cross-check','status':'Review figures','note':note,'page':None,'evidence':None})
+        checks.append(add_impact_guidance({'label':'Payment percentage cross-check','status':'Review figures','note':note,'page':None,'evidence':None}))
     else:
-        checks.append({'label':'Payment percentage cross-check','status':'Not calculated','note':'No payment percentages could be confidently isolated from the extracted text. Check the payment table manually.','page':None,'evidence':None})
+        checks.append(add_impact_guidance({'label':'Payment percentage cross-check','status':'Not calculated','note':'No payment percentages could be confidently isolated from the extracted text. Check the payment table manually.','page':None,'evidence':None}))
     return checks
 
 def build_report(pages):
@@ -196,7 +229,7 @@ def build_report(pages):
             attention_count += 1
             status = 'Information not found'
             note = f'No clear {label.lower()} reference was found in the extracted quotation text.'
-        findings.append({'label': label, 'status': status, 'note': note, 'page': page, 'evidence': evidence['text'] if evidence else None})
+        findings.append(add_impact_guidance({'label': label, 'status': status, 'note': note, 'page': page, 'evidence': evidence['text'] if evidence else None}))
 
     amounts = find_amounts(text)
     commercial_checks = commercial_review(pages, text)
