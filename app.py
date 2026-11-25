@@ -323,8 +323,17 @@ def extract_payment_percentages(pages):
         text = p['text'] or ''
         for m in re.finditer(r'(\d+(?:\.\d+)?)\s*%', text):
             context = re.sub(r'\s+', ' ', text[max(0, m.start()-130):min(len(text), m.end()+180)]).strip()
-            if re.search(r'payment|advance|milestone|dispatch|delivery|commissioning|order|balance', context, re.I):
-                out.append({'percentage': float(m.group(1)), 'page': p['page'], 'excerpt': context})
+            if re.search(r'payment|advance|milestone|dispatch|delivery|commissioning|order|balance|loi|lock[- ]?in|registration', context, re.I):
+                before_work = bool(re.search(
+                    r'advance|on order|with order|loi|letter of intent|registration|lock[- ]?in|before (?:delivery|dispatch|work|start)|on dispatch',
+                    context, re.I
+                ))
+                out.append({
+                    'percentage': float(m.group(1)),
+                    'page': p['page'],
+                    'excerpt': context,
+                    'stage': 'Before delivery/work' if before_work else 'Delivery/work stage'
+                })
     return out
 
 def questions_from_findings(findings, red_flags, payment_percentages):
@@ -405,11 +414,15 @@ def build_report(pages):
     total_figures = [x for x in amounts if x['label'] == 'total']
     component_figures = [x for x in amounts if x['label'] == 'component']
     exposure = None
-    if total_figures and payment_percentages:
-        exposure_pct = sum(x['percentage'] for x in payment_percentages)
+    if payment_percentages:
+        before_work = [x for x in payment_percentages if x.get('stage') == 'Before delivery/work']
+        before_pct = sum(x['percentage'] for x in before_work)
+        total_value = total_figures[0]['value'] if total_figures else None
         exposure = {
-            'payment_percentage_before_delivery_or_work': exposure_pct,
-            'basis': 'Payment percentages found near payment-related wording; confirm the stage definitions in the original quotation.'
+            'payment_percentage_before_delivery_or_work': before_pct,
+            'payment_amount_before_delivery_or_work': round(total_value * before_pct / 100, 2) if total_value is not None else None,
+            'total_quotation_amount': total_figures[0]['raw'] if total_figures else None,
+            'basis': 'Only payment stages explicitly associated with advance/order/LOI/registration/lock-in or payment before dispatch/delivery/work are included. Confirm the stage wording in the original quotation.'
         }
 
     questions = questions_from_findings(findings, red_flags, payment_percentages)
