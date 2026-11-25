@@ -25,6 +25,13 @@ class ReportLogicTests(unittest.TestCase):
         self.assertIn("Substitution wording", labels)
         self.assertIn("Extra / actuals charges", labels)
 
+
+    def test_before_you_pay_priorities_use_actual_findings(self):
+        r = build_report(pages("Freight will be extra and charged at actuals. Warranty: 5 years."))
+        self.assertEqual(r["before_you_pay"][0]["label"], "Extra / actuals charges")
+        self.assertTrue(r["before_you_pay"][0]["action"])
+        self.assertLessEqual(len(r["before_you_pay"]), 3)
+
     def test_payment_percentages_are_listed(self):
         r = build_report(pages("Payment: 40% advance, 30% on delivery, 20% on installation, 10% on commissioning."))
         self.assertEqual([x["percentage"] for x in r["payment_percentages"]], [40.0, 30.0, 20.0, 10.0])
