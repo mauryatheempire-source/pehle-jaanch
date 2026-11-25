@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pehle Jaanch — Free Gate</title>
+<style>
+:root{--navy:#101f32;--blue:#1769e8;--muted:#667991;--line:#dce5ee;--bg:#f5f8fb;--white:#fff;--amber:#b27700;--red:#a84a4a;--green:#16845b}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,Arial,sans-serif;color:var(--navy);background:#f7f9fc}
+a{text-decoration:none;color:inherit}.container{width:min(920px,calc(100% - 40px));margin:auto}
+.nav{height:72px;background:#f5f7f9;border-bottom:1px solid #e5ebf1;display:flex;align-items:center}.navinner{display:flex;justify-content:space-between;align-items:center}.brand{font-size:21px;font-weight:850;letter-spacing:-.8px}.brand span{color:var(--blue)}.home{font-size:12px;font-weight:800;color:#52657b}.home:hover{color:var(--blue)}
+main{padding:34px 0 70px}.intro{max-width:700px;margin:0 auto 24px;text-align:center}.eyebrow{display:inline-block;color:#0759c9;background:#edf4ff;border-radius:30px;padding:8px 12px;font-size:10px;font-weight:900;letter-spacing:.7px}.intro h1{font-size:clamp(29px,5vw,42px);line-height:1.08;letter-spacing:-1.2px;margin:15px 0 10px}.intro p{font-size:14px;line-height:1.6;color:var(--muted);margin:0}
+.progressWrap{max-width:700px;margin:0 auto 15px}.progressTop{display:flex;justify-content:space-between;color:#728196;font-size:11px;font-weight:750;margin-bottom:7px}.track{height:7px;background:#e8edf3;border-radius:20px;overflow:hidden}.fill{height:100%;background:var(--blue);border-radius:20px;transition:width .2s ease}
+.card{max-width:700px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:18px;padding:25px;box-shadow:0 10px 30px rgba(20,45,75,.045)}.qNum{font-size:10px;color:var(--blue);font-weight:900;letter-spacing:.8px}.qTitle{font-size:23px;line-height:1.25;letter-spacing:-.4px;margin:8px 0 8px}.qHelp{font-size:13px;color:var(--muted);line-height:1.55;margin:0 0 18px}
+.options{display:grid;gap:9px}.option{display:flex;align-items:flex-start;gap:11px;border:1px solid #dce5ee;border-radius:12px;padding:14px;cursor:pointer;background:#fff;transition:border-color .12s,background .12s}.option:hover{border-color:#b9cde7;background:#fbfdff}.option.selected{border-color:#1769e8;background:#f3f7ff}.option input{margin-top:3px;accent-color:var(--blue)}.option b{font-size:13px;display:block}.option span{font-size:11px;color:#728196;line-height:1.45;display:block;margin-top:3px}
+.actions{display:flex;justify-content:space-between;gap:10px;margin-top:21px}.btn{border:1px solid #d7e1eb;background:#fff;color:#40566e;border-radius:10px;padding:11px 16px;font-weight:800;font-size:12px;cursor:pointer}.btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}.btn:disabled{opacity:.45;cursor:not-allowed}
+.result{max-width:700px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:18px;padding:25px;display:none}.resultBadge{display:inline-block;border-radius:20px;padding:7px 11px;font-size:11px;font-weight:900}.slow{background:#fff5df;color:#8b6500}.caution{background:#fff0dc;color:#9b6200}.stop{background:#fff0f0;color:#9b3d3d}.result h2{font-size:28px;margin:12px 0 7px}.resultLead{font-size:14px;color:#5e7187;line-height:1.6;margin:0 0 18px}.reasonList{display:grid;gap:9px;margin:0 0 20px}.reason{border:1px solid #e2e8ef;border-radius:11px;padding:12px 13px;font-size:12px;line-height:1.5;color:#53657a}.reason b{color:#243951;display:block;margin-bottom:3px}.next{border-top:1px solid #e5ebf1;padding-top:17px}.next b{font-size:13px}.next ul{margin:8px 0 0;padding-left:20px;color:#53657a;font-size:12px;line-height:1.65}.disclaimer{max-width:700px;margin:15px auto 0;color:#7a8999;font-size:10px;line-height:1.5;text-align:center}
+@media(max-width:600px){.container{width:calc(100% - 28px)}main{padding-top:25px}.card,.result{padding:19px}.qTitle{font-size:20px}.actions{position:sticky;bottom:10px;background:#fff;padding-top:8px}.btn{padding:11px 14px}}
+</style>
+</head>
+<body>
+<header class="nav"><div class="container navinner"><a class="brand" href="/">Pehle <span>Jaanch</span></a><a class="home" href="/">← Home</a></div></header>
+<main>
+<section class="intro">
+<div class="eyebrow">FREE PEHLE JAANCH GATE</div>
+<h1>Before you pay an EPC contractor, check these basics first.</h1>
+<p>This is a buyer-side checklist. It does not rate or accuse a company. It helps you identify what you should independently verify before making a commitment.</p>
+</section>
+<div class="progressWrap" id="progressWrap"><div class="progressTop"><span id="progressText">1 of 6</span><span>Free · No upload · No login</span></div><div class="track"><div class="fill" id="progressFill" style="width:16.66%"></div></div></div>
+<section class="card" id="questionCard">
+<div class="qNum" id="qNum">CHECK 01</div><h2 class="qTitle" id="qTitle"></h2><p class="qHelp" id="qHelp"></p>
+<div class="options" id="options"></div>
+<div class="actions"><button class="btn" id="backBtn" type="button">Back</button><button class="btn primary" id="nextBtn" type="button" disabled>Next</button></div>
+</section>
+<section class="result" id="result">
+<span class="resultBadge" id="resultBadge"></span><h2 id="resultTitle"></h2><p class="resultLead" id="resultLead"></p>
+<div class="reasonList" id="reasons"></div>
+<div class="next"><b>Before you pay</b><ul id="nextSteps"></ul></div>
+</section>
+<p class="disclaimer">This checklist supports your judgement. It is not legal, engineering or financial advice.</p>
+</main>
+<script>
+const QUESTIONS=[
+{id:"records",title:"Can you independently check the company records and GST details?",help:"Use the company name, registration details and GST information supplied by the EPC provider. Check them through the relevant official records rather than relying only on a brochure or quotation.",opts:[
+["yes","Yes — I checked the records independently.","I can match the details and the information is consistent."],
+["partial","Partly — I have details, but have not checked them yet.","The details are available, but independent checking is still pending."],
+["no","No — I cannot verify them yet.","I do not have enough independently checked information."]
+]},
+{id:"clients",title:"Have you found former clients independently?",help:"Do not rely only on client names supplied by the EPC provider. Try to locate a former client yourself and confirm the project and contact details.",opts:[
+["yes","Yes — I found and contacted a former client myself.","The reference was found independently and discussed."],
+["partial","I have a reference, but it came from the EPC provider.","I still need an independent route to the reference."],
+["no","No — I have not found one independently.","Past-client verification is still pending."]
+]},
+{id:"project",title:"Have you independently selected a past project to inspect?",help:"Choose a project yourself from public information or another independent source. Do not let the EPC provider choose the only project you verify.",opts:[
+["yes","Yes — I selected the project myself.","The project was not selected only by the provider."],
+["partial","I have a project, but the provider selected it.","I still need an independently selected project."],
+["no","No — I have not selected one yet.","An independent project check is still pending."]
+]},
+{id:"visit",title:"Can you visit that project without advance notice and speak to the owner?",help:"If practical, visit without the provider arranging the meeting. Speak to the actual owner/operator and check that the project name and location match what you were told.",opts:[
+["yes","Yes — I can do this independently.","I can check the site, speak to the owner/operator and match the project details."],
+["partial","I can visit, but the meeting is being arranged by the provider.","The visit may still be useful, but independent confirmation is stronger."],
+["no","No — I cannot independently verify the site yet.","The project reference remains unverified."]
+]},
+{id:"fees",title:"Is anyone asking for registration, LOI or lock-in money before these checks?",help:"Treat a fee request as a commercial term to understand, not as proof of wrongdoing. Ask exactly what the payment is for, whether it is refundable, and what happens if the project does not proceed.",opts:[
+["no","No such fee is being asked.","No registration, LOI or lock-in payment is currently being requested."],
+["unclear","A fee is mentioned, but the terms are unclear.","I need the amount, purpose, refund rule and trigger in writing."],
+["yes","Yes — money is being requested before I finish the checks.","I should clarify the purpose, refund rule and payment trigger before paying."]
+]},
+{id:"payment","title:"Has the EPC provider asked you to pay before these checks are complete?",help:"A large early payment can create exposure before you have independently checked the provider, references and project. The safer approach is to resolve the open checks first and tie payments to clear deliverables.",opts:[
+["no","No — I have not been asked to pay yet.","The payment decision is still open."],
+["yes","Yes — payment is being requested now.","The payment timing should be clarified before money is transferred."],
+["already","I have already paid something.","Review what was paid, what was promised and what remains independently verified."]
+]}
+];
+
+let answers={},index=0;
+const $=id=>document.getElementById(id);
+function render(){
+ const q=QUESTIONS[index];$("qNum").textContent="CHECK "+String(index+1).padStart(2,"0");$("qTitle").textContent=q.title;$("qHelp").textContent=q.help;
+ $("progressText").textContent=(index+1)+" of "+QUESTIONS.length;$("progressFill").style.width=((index+1)/QUESTIONS.length*100)+"%";
+ $("options").innerHTML=q.opts.map(o=>'<label class="option '+(answers[q.id]===o[0]?"selected":"")+'"><input type="radio" name="'+q.id+'" value="'+o[0]+'" '+(answers[q.id]===o[0]?"checked":"")+'><div><b>'+o[1]+'</b><span>'+o[2]+'</span></div></label>').join("");
+ document.querySelectorAll(".option").forEach(el=>el.addEventListener("click",()=>{const input=el.querySelector("input");answers[q.id]=input.value;document.querySelectorAll(".option").forEach(x=>x.classList.remove("selected"));el.classList.add("selected");$("nextBtn").disabled=false;}));
+ $("backBtn").disabled=index===0;$("nextBtn").textContent=index===QUESTIONS.length-1?"See my result":"Next";
+ $("nextBtn").disabled=!answers[q.id];
+}
+function calculate(){
+ let score=0, reasons=[];
+ const a=id=>answers[id];
+ if(a("records")==="yes")score+=2; else if(a("records")==="partial"){score+=1;reasons.push(["Company records / GST","Independent checking is still incomplete."]);}else reasons.push(["Company records / GST","The company and GST details still need independent checking."]);
+ if(a("clients")==="yes")score+=2; else if(a("clients")==="partial"){score+=1;reasons.push(["Former client","The reference has not yet been independently found and confirmed."]);}else reasons.push(["Former client","You do not yet have an independently found former client reference."]);
+ if(a("project")==="yes")score+=2; else if(a("project")==="partial"){score+=1;reasons.push(["Past project","The project was selected by the provider, so an independent selection is still useful."]);}else reasons.push(["Past project","You have not yet selected a past project independently."]);
+ if(a("visit")==="yes")score+=2; else if(a("visit")==="partial"){score+=1;reasons.push(["Site visit","The visit is not fully independent yet. Try to verify the owner/operator and project details yourself."]);}else reasons.push(["Site visit","You cannot yet independently verify the site, owner/operator and project details."]);
+ if(a("fees")==="yes"){score-=2;reasons.push(["Registration / LOI / lock-in fee","Money is being requested before the basic checks are complete. Clarify purpose, refundability and trigger in writing."]);}else if(a("fees")==="unclear"){score-=1;reasons.push(["Registration / LOI / lock-in fee","The fee terms are unclear. Do not treat an unclear payment trigger as settled."]);}else score+=1;
+ if(a("payment")==="yes"){score-=2;reasons.push(["Payment timing","Payment is being requested before the checks are complete. Tie any payment to a clear, verifiable deliverable and written terms."]);}else if(a("payment")==="already"){score-=1;reasons.push(["Payment already made","Review what was paid, what deliverable was received and what remains independently verified."]);}else score+=1;
+ let type="slow",title="Go slowly",lead="You have some checks in place, but resolve the open points before making a commitment.";
+ if(score<=2){type="stop";title="Stop and ask questions";lead="Too many important checks are still open, or money is being requested before you have completed the basic verification."}
+ else if(score<=6){type="caution";title="Caution";lead="Some basic checks are in place, but there are still points to resolve before paying or signing."}
+ if(!reasons.length)reasons.push(["Basic checks","You have independently checked the main reference points and no early-payment issue was selected. Keep written evidence for each check."]);
+ $("resultBadge").className="resultBadge "+type;$("resultBadge").textContent=title;$("resultTitle").textContent=title;$("resultLead").textContent=lead;
+ $("reasons").innerHTML=reasons.map(r=>'<div class="reason"><b>'+r[0]+'</b>'+r[1]+'</div>').join("");
+ const steps=["Keep copies/screenshots of the records and references you checked.","Ask for every registration/LOI/lock-in fee, refund rule and payment trigger in writing.","Do not rely on one provider-selected reference; independently verify the project and owner/operator.","If you still have an open point, use the quotation review before deciding the payment milestone."];
+ $("nextSteps").innerHTML=steps.map(x=>"<li>"+x+"</li>").join("");
+ $("questionCard").style.display="none";$("progressWrap").style.display="none";$("result").style.display="block";window.scrollTo({top:0,behavior:"smooth"});
+}
+$("nextBtn").addEventListener("click",()=>{if(index<QUESTIONS.length-1){index++;render();}else calculate();});
+$("backBtn").addEventListener("click",()=>{if(index>0){index--;render();}});
+render();
+</script>
+</body>
+</html>
