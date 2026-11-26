@@ -389,6 +389,13 @@
   .howItWorks .howStep p,.trustSection .trustCard p{font-size:14px;line-height:1.55}
 }
 </style>>
+<style>
+.projectVisual{position:relative;height:112px;margin:-24px -24px 18px;width:calc(100% + 48px);border-radius:12px 12px 0 0;overflow:hidden;background:#edf4ff}
+.projectVisual img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+.projectCard>div:not(.projectVisual){position:relative;z-index:1;padding-right:0}
+@media(max-width:600px){.projectVisual{height:96px;margin:-20px -20px 16px;width:calc(100% + 40px)}}
+@media(prefers-reduced-motion:no-preference){.projectVisual img{transition:transform .35s ease}.projectCard:hover .projectVisual img{transform:scale(1.03)}}
+</style>
 </head>
 <body>
 <header class="nav"><div class="container navinner"><a class="brand" href="/" aria-label="Pehle Jaanch home">Pehle <span>Jaanch</span></a><div style="display:flex;align-items:center;gap:18px"><nav class="siteNav"><a href="/gate">Free Pehle Jaanch</a><a href="#projects">Projects</a><a href="#howItWorks">How it works</a><a href="#trust">Trust & privacy</a><a href="#report">Check quotation</a></nav><label class="langWrap"><span id="navLanguage">Language</span><select id="languageSelect" aria-label="Choose language"><option value="en">English</option><option value="hi">हिन्दी</option><option value="mr">मराठी</option></select></label></div></div></header>
@@ -419,12 +426,12 @@
       <p>Learn what a plant involves, its major systems, infrastructure, commercial heads and the questions worth asking.</p>
     </div>
     <div class="projectGrid">
-      <a class="projectCard reveal" href="/projects/solar"><div class="projectVisual solarVisual" aria-hidden="true"></div><span class="projectIcon">☀</span><div><b>Solar</b><p>Utility-scale, rooftop, floating, hybrid & storage</p></div><span class="projectArrow">→</span></a>
-      <a class="projectCard reveal" href="/projects/cbg"><div class="projectVisual cbgVisual" aria-hidden="true"></div><span class="projectIcon">♻</span><div><b>CBG / Biogas</b><p>Feedstock, digestion, gas upgrading & compression</p></div><span class="projectArrow">→</span></a>
-      <a class="projectCard reveal" href="/projects/water"><div class="projectVisual waterVisual" aria-hidden="true"></div><span class="projectIcon">💧</span><div><b>STP / ETP / WTP</b><p>Capacity, treatment process, reuse & utilities</p></div><span class="projectArrow">→</span></a>
-      <a class="projectCard reveal" href="/projects/bess"><div class="projectVisual bessVisual" aria-hidden="true"></div><span class="projectIcon">⚡</span><div><b>BESS / Hybrid</b><p>Storage, solar-wind integration & evacuation</p></div><span class="projectArrow">→</span></a>
-      <a class="projectCard reveal" href="/projects/pyrolysis"><div class="projectVisual pyroVisual" aria-hidden="true"></div><span class="projectIcon">🔥</span><div><b>Pyrolysis</b><p>Feedstock, reactor, products, utilities & emissions</p></div><span class="projectArrow">→</span></a>
-      <a class="projectCard reveal" href="/projects/industrial"><div class="projectVisual industrialVisual" aria-hidden="true"></div><span class="projectIcon">🏭</span><div><b>Industrial EPC</b><p>Process plants, utilities, machinery & infrastructure</p></div><span class="projectArrow">→</span></a>
+      <a class="projectCard reveal" href="/projects/solar"><div class="projectVisual solarVisual"><img src="https://systemrenewable.com/project-kamuthi.jpg" alt="Utility-scale solar power plant" loading="lazy"></div><span class="projectIcon">☀</span><div><b>Solar</b><p>Utility-scale, rooftop, floating, hybrid & storage</p></div><span class="projectArrow">→</span></a>
+      <a class="projectCard reveal" href="/projects/cbg"><div class="projectVisual cbgVisual"><img src="https://swarajya.gumlet.io/swarajya/2023-04/e1bed48a-2a67-4a06-b088-9fcc19e2fff6/Asias_largest_Compressed_Bio_Gas_plant__1_.jpg" alt="Compressed biogas plant" loading="lazy"></div><span class="projectIcon">♻</span><div><b>CBG / Biogas</b><p>Feedstock, digestion, gas upgrading & compression</p></div><span class="projectArrow">→</span></a>
+      <a class="projectCard reveal" href="/projects/water"><div class="projectVisual waterVisual"><img src="https://www.cleantechwater.co.in/wp-content/uploads/2023/10/Sewage-Treatment-Plant-in-Delhi.jpg" alt="Wastewater treatment plant" loading="lazy"></div><span class="projectIcon">💧</span><div><b>STP / ETP / WTP</b><p>Capacity, treatment process, reuse & utilities</p></div><span class="projectArrow">→</span></a>
+      <a class="projectCard reveal" href="/projects/bess"><div class="projectVisual bessVisual"><img src="https://orionisenergy.eu/besspic/container.jpg" alt="Battery energy storage system" loading="lazy"></div><span class="projectIcon">⚡</span><div><b>BESS / Hybrid</b><p>Storage, solar-wind integration & evacuation</p></div><span class="projectArrow">→</span></a>
+      <a class="projectCard reveal" href="/projects/pyrolysis"><div class="projectVisual pyroVisual"><img src="https://image.made-in-china.com/2f0j00HbiczRSJEegM/Manufacturer-of-Waste-Tyre-Pyrolysis-Plant-for-Used-Tyre-to-Diesel.jpg" alt="Industrial pyrolysis plant" loading="lazy"></div><span class="projectIcon">🔥</span><div><b>Pyrolysis</b><p>Feedstock, reactor, products, utilities & emissions</p></div><span class="projectArrow">→</span></a>
+      <a class="projectCard reveal" href="/projects/industrial"><div class="projectVisual industrialVisual"><img src="https://static.wixstatic.com/media/628b7a_8d574ccd28bb4cd693958b9c4a449604~mv2.png/v1/fill/w_1000%2Ch_667%2Cal_c%2Cq_90%2Cusm_0.66_1.00_0.01/628b7a_8d574ccd28bb4cd693958b9c4a449604~mv2.png" alt="Industrial process plant" loading="lazy"></div><span class="projectIcon">🏭</span><div><b>Industrial EPC</b><p>Process plants, utilities, machinery & infrastructure</p></div><span class="projectArrow">→</span></a>
     </div>
     <div class="projectMeta">
       <div><b>Project information</b><span>Completed • Ongoing • Tendered • Announced</span></div>
